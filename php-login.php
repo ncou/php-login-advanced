@@ -16,8 +16,11 @@ if (version_compare(PHP_VERSION, '5.3.7', '<')) {
 // include the config
 require_once('config/config.php');
 
-// include the to-be-used language, english by default. feel free to translate your project and include something else
-require_once('translations/en.php');
+// include the to-be-used language. feel free to translate your project and include something else.
+// detection of the language for the current user/browser
+$user_lang = substr($_SERVER['HTTP_ACCEPT_LANGUAGE'], 0, 2);
+// if translation file for the detected language doesn't exist, we use default english file
+require_once('translations/' . (file_exists('translations/' . $user_lang . '.php') ? $user_lang : 'en') . '.php');
 
 // include the PHPMailer library
 require_once('libraries/PHPMailer.php');
