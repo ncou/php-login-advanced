@@ -17,7 +17,7 @@ define("MESSAGE_EMAIL_CHANGED_SUCCESSFULLY", "Votre adresse email a été chang�
 define("MESSAGE_EMAIL_EMPTY", "L'adresse email ne peut pas être vide");
 define("MESSAGE_EMAIL_INVALID", "Cette adresse email n'a pas un format valide");
 define("MESSAGE_EMAIL_SAME_LIKE_OLD_ONE", "Désolé, cette adresse email est déjà le votre. Merci d'en choisir un autre");
-define("MESSAGE_EMAIL_TOO_LONG", "L'adresse email doit contenir au maximum 64 caractères");
+define("MESSAGE_EMAIL_TOO_LONG", "L'adresse email doit contenir au maximum 254 caractères");
 define("MESSAGE_LINK_PARAMETER_EMPTY", "Paramètre du lien incorrect.");
 define("MESSAGE_LOGGED_OUT", "Vous avez été deconnecté.");
 // The "login failed"-message is a security improved feedback that doesn't show a potential attacker if the user exists or not

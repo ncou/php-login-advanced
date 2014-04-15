@@ -448,7 +448,7 @@ class Login
     public function editUserEmail($user_email)
     {
         // prevent database flooding
-        $user_email = substr(trim($user_email), 0, 64);
+        $user_email = substr(trim($user_email), 0, 254);
 
         if (!empty($user_email) && $user_email == $_SESSION["user_email"]) {
             $this->errors[] = MESSAGE_EMAIL_SAME_LIKE_OLD_ONE;

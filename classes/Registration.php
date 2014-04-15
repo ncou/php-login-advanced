@@ -102,7 +102,7 @@ class Registration
             $this->errors[] = MESSAGE_USERNAME_INVALID;
         } elseif (empty($user_email)) {
             $this->errors[] = MESSAGE_EMAIL_EMPTY;
-        } elseif (strlen($user_email) > 64) {
+        } elseif (strlen($user_email) > 254) {
             $this->errors[] = MESSAGE_EMAIL_TOO_LONG;
         } elseif (!filter_var($user_email, FILTER_VALIDATE_EMAIL)) {
             $this->errors[] = MESSAGE_EMAIL_INVALID;
