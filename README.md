@@ -1,41 +1,28 @@
 ## A PHP login script (ADVANCED VERSION)
 
-A simple, but secure PHP login script. Similar to minimal version, but much more features: PDO, Register, login, logout,
-email verification, password reset, edit user data, gravatars, captchas, remember me / stay logged in cookies,
-"remember me" supports parallel login from multiple devices, login with email, i18n/internationalization,
-mail sending via PHPMailer (SMTP or PHP's mail() function/linux sendmail). Uses the ultra-modern & future-proof PHP 5.5.
-BLOWFISH hashing/salting functions (includes the official PHP 5.3 & PHP 5.4 compatibility pack, which makes those
-functions available in those versions too).
+This script is base on [PHP-Login-Advanced](https://github.com/panique/php-login-advanced) who is not maintained anymore.
 
-**Please also note: This version is not maintained anymore. The php-login project will focus on developing the
-[Professional MVC Version](https://github.com/panique/php-login) and highly recommends you to also use that version.**
+A simple, but secure PHP login script with many features includes :
+- users can register, login, logout (with username or email, password)
+- captcha
+- account verification via mail
+- password reset
+- edit user data (password, username, email)
+- "remember me" / stay logged in cookies
+- **"remember me" supports parallel login from multiple devices <- NEW**
+- **i18n/internationalization: English, French at the moment but it's easy to add a new language <- NEW**
+- gravatars
 
-Follow the project on **[Twitter](https://twitter.com/simplephplogin)**,
-**[Facebook](https://www.facebook.com/pages/PHP-Login-Script/461306677235868)** or
-**[Google+](https://plus.google.com/104110071861201951660)** and have a look on the official support blog
-**[Dev Metal](http://www.dev-metal.com)**. Ask questions in the [Official Support Forum](http://support-forum.php-login.net/).
+IT stuffs...
+- PDO used for database access
+- mail sending via PHPMailer (SMTP or PHP's mail() function/linux sendmail)
+- Uses the ultra-modern & future-proof PHP 5.5.BLOWFISH hashing/salting functions (includes the official PHP 5.3 & PHP 5.4 compatibility pack, which makes those functions available in those versions too)
 
-**This script is part of the php-login project, a collection of 4 different login scripts**.
-See [php-login.net](http://www.php-login.net) for more info.
-
-1. **One-file version:** Full login script in one file. Uses a one-file SQLite database (no MySQL needed) and PDO.
-   Features: Register, login, logout.
-   https://github.com/panique/php-login-one-file
-2. **Minimal version** All the basic functions in a clean file structure, uses MySQL and mysqli.
-   Register, login, logout.
-   https://github.com/panique/php-login-minimal
-3. **Advanced version** Similar to the minimal version, but full of features.
-   Uses PDO, Captchas, mail sending via SMTP and much more.
-   https://github.com/panique/php-login-advanced
-4. **Professional version** Everything comes with a professional MVC framework structure, perfect for building
-   real applications. Additional features like: URL rewriting, professional usage of controllers and actions, PDO, MySQL,
-   mail sending via PHPMailer (SMTP or PHP's mail() function/linux sendmail), user profile pages, public user profiles,
-   gravatars and local avatars, account upgrade/downgrade etc., login via Facebook, Composer integration, etc.
-   https://github.com/panique/php-login
+You can also visit [Professional MVC Version](https://github.com/panique/php-login) if you look for a MVC Framework Version.
 
 ## Live-demo
 
-Live demo **[here](http://php-login.net/demo3.html)**, live demo's phpinfo(). **[here](http://phpinfo.php-login.net/)**
+No live demo page available at the moment
 
 ## Requirements
 
@@ -94,9 +81,6 @@ This script comes with a handy .htaccess in the views folder that denies direct 
 
 If you look into the code and at the file/folder-structure everything should be self-explaining.
 
-*Please note: This version is not maintained anymore. The php-login project will focus on developing the
-[Professional MVC Version](https://github.com/panique/php-login) and highly recommends you to also use that version.*
-
 ## Useful links
 
 - [How to use PDO](http://wiki.hashphp.org/PDO_Tutorial_for_MySQL_Developers)
@@ -106,11 +90,6 @@ If you look into the code and at the file/folder-structure everything should be 
 - [Notes on password & hashing salting in upcoming PHP versions (PHP 5.5.x & 5.6 etc.)](https://github.com/panique/php-login/wiki/Notes-on-password-&-hashing-salting-in-upcoming-PHP-versions-%28PHP-5.5.x-&-5.6-etc.%29)
 - [Some basic "benchmarks" of all PHP hash/salt algorithms](https://github.com/panique/php-login/wiki/Which-hashing-&-salting-algorithm-should-be-used-%3F)
 
-## Themes / User Interfaces / Styles
-
-Bookmark the highly related partner-project "[php-login-styles](https://github.com/panique/php-login-styles)" which will
-host beautiful themes for all the php-login versions. Currently this is only a placeholder, the project starts in 2014.
-
 ## License
 
 Licensed under [MIT](http://www.opensource.org/licenses/mit-license.php). You can use this script for free for any
@@ -118,18 +97,14 @@ private or commercial projects.
 
 ## Contribute
 
-This script is not developed any further, so only commit bugfixes, not new features.
-If you want to add new features etc, please contribute into the https://github.com/panique/php-login repo.
+If you want to add new features etc, please contribute into the https://github.com/devplanete/php-login-advanced repo.
 Please commit only in *develop* branch. The *master* branch will always contain the stable version.
 
 ## Support / Donate
 
 If you think this script is useful and saves you a lot of work, then think about supporting the project:
 
-1. Rent your next server at [A2 Hosting](http://www.a2hosting.com/4471.html) or [DigitalOcean](https://www.digitalocean.com/?refcode=40d978532a20).
-2. Donate via [PayPal](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=P5YLUK4MW3LDG)
-   or [GitTip](https://www.gittip.com/Panique/)
-3. Contribute to this project. Feel free to improve this project with your skills.
+1. Contribute to this project. Feel free to improve this project with your skills.
 
 ## Stats
 
