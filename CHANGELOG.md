@@ -1,5 +1,8 @@
 # CHANGE LOG
 
+**April 19th 2014**
+- simplify gravatar integration to a simple function
+
 **April 15th 2014**
 - add multilanguage support (detection of browser language)
 - add french translation file
