@@ -1,6 +1,7 @@
 # CHANGE LOG
 
 **April 19th 2014**
+- "remember me" supports parallel login from multiple devices
 - simplify gravatar integration to a simple function
 
 **April 15th 2014**
