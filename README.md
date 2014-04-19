@@ -37,7 +37,7 @@ No live demo page available at the moment
 
 ## Installation (quick setup)
 
-* 1. create database *login* and table *users* via the SQL statements in the `_installation` folder.
+* 1. create database *login* and tables *users* and *user_connections* via the SQL statements in the `_installation` folder.
 * 2. in `config/config.php`, change mySQL user and password (*DB_USER* and *DB_PASS*).
 * 3. in `config/config.php`, change *COOKIE_DOMAIN* to your domain name (and don't forget to put the dot in front of the domain!)
 * 4. in `config/config.php`, change *COOKIE_SECRET_KEY* to a random string. this will make your cookies more secure
