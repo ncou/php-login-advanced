@@ -37,7 +37,7 @@ function PHPLoginAutoload($classname)
         require $filename;
     } else {
         // try to load the file from the "libraries" directory
-        $filename = dirname(__FILE__) . DIRECTORY_SEPARATOR . 'libraries' . DIRECTORY_SEPARATOR . strtolower($classname) . '.php';
+        $filename = dirname(__FILE__) . DIRECTORY_SEPARATOR . 'libraries' . DIRECTORY_SEPARATOR . $classname . '.php';
         if (is_readable($filename)) {
             require $filename;
         // file cannot be found
