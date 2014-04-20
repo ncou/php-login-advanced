@@ -22,9 +22,30 @@ $user_lang = substr($_SERVER['HTTP_ACCEPT_LANGUAGE'], 0, 2);
 // if translation file for the detected language doesn't exist, we use default english file
 require_once('translations/' . (file_exists('translations/' . $user_lang . '.php') ? $user_lang : 'en') . '.php');
 
-// include the PHPMailer library
-require_once('libraries/PHPMailer.php');
+/**
+ * PHPLogin SPL autoloader.
+ * This auto-loading function will be called every time a class is used but not yet loaded.
+ * Login, Registration or PHPMailer classes are loaded only when they are really needed.
+ * Example: The first time that "new Login();" is called, the corresponding php file is loaded.
+ * @param string $classname The name of the class to load
+ */
+function PHPLoginAutoload($classname)
+{
+    // try to load the file from the "classes" directory
+    $filename = dirname(__FILE__) . DIRECTORY_SEPARATOR . 'classes' . DIRECTORY_SEPARATOR . $classname . '.php';
+    if (is_readable($filename)) {
+        require $filename;
+    } else {
+        // try to load the file from the "libraries" directory
+        $filename = dirname(__FILE__) . DIRECTORY_SEPARATOR . 'libraries' . DIRECTORY_SEPARATOR . $classname . '.php';
+        if (is_readable($filename)) {
+            require $filename;
+        // file cannot be found
+        } else {
+            exit('Unable to find the file ' . $classname . '.php');
+        }
+    }
+}
 
-// load the login class
-require_once('classes/Login.php');
-require_once('classes/Registration.php');
+// spl_autoload_register defines the function to be called when a class is not yet loaded.
+spl_autoload_register('PHPLoginAutoload');
