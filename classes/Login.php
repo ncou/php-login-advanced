@@ -26,10 +26,6 @@ class Login
      */
     private $user_email = "";
     /**
-     * @var boolean $user_is_logged_in The user's login status
-     */
-    private $user_is_logged_in = false;
-    /**
      * @var boolean $password_reset_link_is_valid Marker for view handling
      */
     private $password_reset_link_is_valid  = false;
@@ -53,10 +49,7 @@ class Login
     public function __construct()
     {
         // create/read session
-        session_start();
-
-        // TODO: organize this stuff better and make the constructor very small
-        // TODO: unite Login and Registration classes ?
+        @session_start();
 
         // check the possible login actions:
         // 1. logout (happen when user clicks logout button)
@@ -76,11 +69,11 @@ class Login
             // checking for form submit from editing screen
             // user try to change his username
             if (isset($_POST["user_edit_submit_name"])) {
-                // function below uses use $_SESSION['user_id'] et $_SESSION['user_email']
+                // function below uses $_SESSION['user_id'] et $_SESSION['user_email']
                 $this->editUserName($_POST['user_name']);
             // user try to change his email
             } elseif (isset($_POST["user_edit_submit_email"])) {
-                // function below uses use $_SESSION['user_id'] et $_SESSION['user_email']
+                // function below uses $_SESSION['user_id'] et $_SESSION['user_email']
                 $this->editUserEmail($_POST['user_email']);
             // user try to change his password
             } elseif (isset($_POST["user_edit_submit_password"])) {
@@ -122,11 +115,9 @@ class Login
         } else {
             try {
                 // Generate a database connection, using the PDO connector
-                // @see http://net.tutsplus.com/tutorials/php/why-you-should-be-using-phps-pdo-for-database-access/
                 // Also important: We include the charset, as leaving it out seems to be a security issue:
                 // @see http://wiki.hashphp.org/PDO_Tutorial_for_MySQL_Developers#Connecting_to_MySQL says:
-                // "Adding the charset to the DSN is very important for security reasons,
-                // most examples you'll see around leave it out. MAKE SURE TO INCLUDE THE CHARSET!"
+                // "Adding the charset to the DSN is very important for security reasons"
                 $this->db_connection = new PDO('mysql:host='. DB_HOST .';dbname='. DB_NAME . ';charset=utf8', DB_USER, DB_PASS);
                 return true;
             } catch (PDOException $e) {
@@ -141,8 +132,6 @@ class Login
      * Search into database for the user data of user_name specified as parameter
      * @return user data as an object if existing user
      * @return false if user_name is not found in the database
-     * TODO: @devplanete This returns two different types. Maybe this is valid, but it feels bad. We should rework this.
-     * TODO: @devplanete After some resarch I'm VERY sure that this is not good coding style! Please fix this.
      */
     private function getUserData($user_name)
     {
@@ -160,18 +149,34 @@ class Login
     }
 
     /**
+     * Search into database for the user data of user_email specified as parameter
+     * @return user data as an object if existing user
+     * @return false if user_email is not found in the database
+     */
+    private function getUserDataFromEmail($user_email)
+    {
+        // if database connection opened
+        if ($this->databaseConnection()) {
+            // database query, getting all the info of the selected user
+            $query_user = $this->db_connection->prepare('SELECT * FROM users WHERE user_email = :user_email');
+            $query_user->bindValue(':user_email', $user_email, PDO::PARAM_STR);
+            $query_user->execute();
+            // get result row (as an object)
+            return $query_user->fetchObject();
+        } else {
+            return false;
+        }
+    }
+
+    /**
      * Logs in with S_SESSION data.
      * Technically we are already logged in at that point of time, as the $_SESSION values already exist.
      */
     private function loginWithSessionData()
     {
+        $this->user_id = $_SESSION['user_id'];
         $this->user_name = $_SESSION['user_name'];
         $this->user_email = $_SESSION['user_email'];
-
-        // set logged in status to true, because we just checked for this:
-        // !empty($_SESSION['user_name']) && ($_SESSION['user_logged_in'] == 1)
-        // when we called this method (in the constructor)
-        $this->user_is_logged_in = true;
     }
 
     /**
@@ -208,7 +213,6 @@ class Login
                         $this->user_id = $result_row->user_id;
                         $this->user_name = $result_row->user_name;
                         $this->user_email = $result_row->user_email;
-                        $this->user_is_logged_in = true;
 
                         // Cookie token usable only once
                         $this->newRememberMeCookie($token);
@@ -245,13 +249,9 @@ class Login
                 $result_row = $this->getUserData(trim($user_name));
 
             // if user has typed a valid email address, we try to identify him with his user_email
-            } else if ($this->databaseConnection()) {
+            } else {
                 // database query, getting all the info of the selected user
-                $query_user = $this->db_connection->prepare('SELECT * FROM users WHERE user_email = :user_email');
-                $query_user->bindValue(':user_email', trim($user_name), PDO::PARAM_STR);
-                $query_user->execute();
-                // get result row (as an object)
-                $result_row = $query_user->fetchObject();
+                $result_row = $this->getUserDataFromEmail(trim($user_name));
             }
 
             // if this user not exists
@@ -284,7 +284,6 @@ class Login
                 $this->user_id = $result_row->user_id;
                 $this->user_name = $result_row->user_name;
                 $this->user_email = $result_row->user_email;
-                $this->user_is_logged_in = true;
 
                 // reset the failed login counter for that user
                 $sth = $this->db_connection->prepare('UPDATE users '
@@ -400,7 +399,6 @@ class Login
         $_SESSION = array();
         session_destroy();
 
-        $this->user_is_logged_in = false;
         $this->messages[] = MESSAGE_LOGGED_OUT;
     }
 
@@ -410,7 +408,7 @@ class Login
      */
     public function isUserLoggedIn()
     {
-        return $this->user_is_logged_in;
+        return (!empty($_SESSION['user_name']) && $_SESSION['user_logged_in'] == 1) ? true : false;
     }
 
     /**
@@ -466,13 +464,9 @@ class Login
         } elseif (empty($user_email) || !filter_var($user_email, FILTER_VALIDATE_EMAIL)) {
             $this->errors[] = MESSAGE_EMAIL_INVALID;
 
-        } else if ($this->databaseConnection()) {
+        } else {
             // check if new email already exists
-            $query_user = $this->db_connection->prepare('SELECT * FROM users WHERE user_email = :user_email');
-            $query_user->bindValue(':user_email', $user_email, PDO::PARAM_STR);
-            $query_user->execute();
-            // get result row (as an object)
-            $result_row = $query_user->fetchObject();
+            $result_row = $this->getUserDataFromEmail($user_email);
 
             // if this email exists
             if (isset($result_row->user_id)) {
@@ -768,9 +762,9 @@ class Login
             // the image url (on gravatarr servers), will return in something like
             // http://www.gravatar.com/avatar/205e460b479e2e5b48aec07710c08d50?s=80&d=mm&r=g
             // note: the url does NOT have something like .jpg
-			return 'http://www.gravatar.com/avatar/' . md5(strtolower(trim($this->user_email))) . "?s=$s&d=$d&r=$r&f=y";
-		} else {
-			return '';
-		}
+            return 'http://www.gravatar.com/avatar/' . md5(strtolower(trim($this->user_email))) . "?s=$s&d=$d&r=$r&f=y";
+        } else {
+            return '';
+        }
     }
 }
