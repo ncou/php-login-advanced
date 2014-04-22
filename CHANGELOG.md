@@ -1,5 +1,8 @@
 # CHANGE LOG
 
+**April 22th 2014**
+- merge Registration class into Login class
+
 **April 20th 2014**
 - update PHPMailer.php from version 5.2.6 to 5.2.7
 - add SPL autoloader function to load classes only when needed
