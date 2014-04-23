@@ -14,18 +14,6 @@ class Login
      */
     private $db_connection = null;
     /**
-     * @var int $user_id The user's id
-     */
-    private $user_id = null;
-    /**
-     * @var string $user_name The user's name
-     */
-    private $user_name = "";
-    /**
-     * @var string $user_email The user's mail
-     */
-    private $user_email = "";
-    /**
      * @var boolean $password_reset_link_is_valid Marker for view handling
      */
     private $password_reset_link_is_valid  = false;
@@ -80,7 +68,6 @@ class Login
 
         // if user has an active session on the server
         } elseif (!empty($_SESSION['user_name']) && ($_SESSION['user_logged_in'] == 1)) {
-            $this->loginWithSessionData();
 
             // checking for form submit from editing screen
             // user try to change his username
@@ -185,14 +172,20 @@ class Login
     }
 
     /**
-     * Logs in with S_SESSION data.
-     * Technically we are already logged in at that point of time, as the $_SESSION values already exist.
+     * Crypt the $password with the PHP 5.5's password_hash()
+     * @return 60 character hash password string
      */
-    private function loginWithSessionData()
+    private function getPasswordHash($password)
     {
-        $this->user_id = $_SESSION['user_id'];
-        $this->user_name = $_SESSION['user_name'];
-        $this->user_email = $_SESSION['user_email'];
+        // check if we have a constant HASH_COST_FACTOR defined (in config/config.php),
+        // if so: put the value into $hash_cost_factor, if not, make $hash_cost_factor = null
+        $hash_cost_factor = (defined('HASH_COST_FACTOR') ? HASH_COST_FACTOR : null);
+
+        // crypt the user's password with the PHP 5.5's password_hash() function, results in a 60 character hash string
+        // the PASSWORD_DEFAULT constant is defined by the PHP 5.5, or if you are using PHP 5.3/5.4, by the password hashing
+        // compatibility library. the third parameter looks a little bit shitty, but that's how those PHP 5.5 functions
+        // want the parameter: as an array with, currently only used with 'cost' => XX.
+        return password_hash($user_password_new, PASSWORD_DEFAULT, array('cost' => $hash_cost_factor));
     }
 
     /**
@@ -224,11 +217,6 @@ class Login
                         $_SESSION['user_name'] = $result_row->user_name;
                         $_SESSION['user_email'] = $result_row->user_email;
                         $_SESSION['user_logged_in'] = 1;
-
-                        // declare user id, set the login status to true
-                        $this->user_id = $result_row->user_id;
-                        $this->user_name = $result_row->user_name;
-                        $this->user_email = $result_row->user_email;
 
                         // Cookie token usable only once
                         $this->newRememberMeCookie($token);
@@ -296,11 +284,6 @@ class Login
                 $_SESSION['user_email'] = $result_row->user_email;
                 $_SESSION['user_logged_in'] = 1;
 
-                // declare user id, set the login status to true
-                $this->user_id = $result_row->user_id;
-                $this->user_name = $result_row->user_name;
-                $this->user_email = $result_row->user_email;
-
                 // reset the failed login counter for that user
                 $sth = $this->db_connection->prepare('UPDATE users '
                         . 'SET user_failed_logins = 0, user_last_failed_login = NULL '
@@ -321,7 +304,7 @@ class Login
                     if (password_needs_rehash($result_row->user_password_hash, PASSWORD_DEFAULT, array('cost' => HASH_COST_FACTOR))) {
 
                         // calculate new hash with new cost factor
-                        $user_password_hash = password_hash($user_password, PASSWORD_DEFAULT, array('cost' => HASH_COST_FACTOR));
+                        $user_password_hash = $this->getPasswordHash($user_password);
 
                         // TODO: this should be put into another method !?
                         $query_update = $this->db_connection->prepare('UPDATE users SET user_password_hash = :user_password_hash WHERE user_id = :user_id');
@@ -529,15 +512,8 @@ class Login
                 // using PHP 5.5's password_verify() function to check if the provided passwords fits to the hash of that user's password
                 if (password_verify($user_password_old, $result_row->user_password_hash)) {
 
-                    // now it gets a little bit crazy: check if we have a constant HASH_COST_FACTOR defined (in config/hashing.php),
-                    // if so: put the value into $hash_cost_factor, if not, make $hash_cost_factor = null
-                    $hash_cost_factor = (defined('HASH_COST_FACTOR') ? HASH_COST_FACTOR : null);
-
-                    // crypt the user's password with the PHP 5.5's password_hash() function, results in a 60 character hash string
-                    // the PASSWORD_DEFAULT constant is defined by the PHP 5.5, or if you are using PHP 5.3/5.4, by the password hashing
-                    // compatibility library. the third parameter looks a little bit shitty, but that's how those PHP 5.5 functions
-                    // want the parameter: as an array with, currently only used with 'cost' => XX.
-                    $user_password_hash = password_hash($user_password_new, PASSWORD_DEFAULT, array('cost' => $hash_cost_factor));
+                    // crypt the new user's password with the PHP 5.5's password_hash() function
+                    $user_password_hash = $this->getPasswordHash($user_password_new);
 
                     // write users new hash into database
                     $query_update = $this->db_connection->prepare('UPDATE users SET user_password_hash = :user_password_hash WHERE user_id = :user_id');
@@ -642,7 +618,7 @@ class Login
         $mail->AddAddress($user_email);
         $mail->Subject = EMAIL_PASSWORDRESET_SUBJECT;
 
-        $link    = EMAIL_PASSWORDRESET_URL.'?user_name='.urlencode($user_name).'&verification_code='.urlencode($user_password_reset_hash);
+        $link = EMAIL_PASSWORDRESET_URL.'?user_name='.urlencode($user_name).'&verification_code='.urlencode($user_password_reset_hash);
         $mail->Body = EMAIL_PASSWORDRESET_CONTENT . ' ' . $link;
 
         if(!$mail->Send()) {
@@ -702,15 +678,8 @@ class Login
             $this->errors[] = MESSAGE_PASSWORD_TOO_SHORT;
         // if database connection opened
         } else if ($this->databaseConnection()) {
-            // now it gets a little bit crazy: check if we have a constant HASH_COST_FACTOR defined (in config/hashing.php),
-            // if so: put the value into $hash_cost_factor, if not, make $hash_cost_factor = null
-            $hash_cost_factor = (defined('HASH_COST_FACTOR') ? HASH_COST_FACTOR : null);
-
-            // crypt the user's password with the PHP 5.5's password_hash() function, results in a 60 character hash string
-            // the PASSWORD_DEFAULT constant is defined by the PHP 5.5, or if you are using PHP 5.3/5.4, by the password hashing
-            // compatibility library. the third parameter looks a little bit shitty, but that's how those PHP 5.5 functions
-            // want the parameter: as an array with, currently only used with 'cost' => XX.
-            $user_password_hash = password_hash($user_password_new, PASSWORD_DEFAULT, array('cost' => $hash_cost_factor));
+            // crypt the user's password with the PHP 5.5's password_hash() function.
+            $user_password_hash = $this->getPasswordHash($user_password_new);
 
             // write users new hash into database
             $query_update = $this->db_connection->prepare('UPDATE users SET user_password_hash = :user_password_hash,
@@ -752,15 +721,6 @@ class Login
     }
 
     /**
-     * Gets the username
-     * @return string username
-     */
-    public function getUsername()
-    {
-        return $this->user_name;
-    }
-
-    /**
      * Get a Gravatar URL for the email address of connected user
      * Gravatar is the #1 (free) provider for email address based global avatar hosting.
      * The URL returns always a .jpg file !
@@ -774,11 +734,11 @@ class Login
      */
     public function getGravatarImageUrl($s = 50, $d = 'mm', $r = 'g')
     {
-        if ($this->user_email != '') {
+        if ($_SESSION['user_email'] != '') {
             // the image url (on gravatarr servers), will return in something like
             // http://www.gravatar.com/avatar/205e460b479e2e5b48aec07710c08d50?s=80&d=mm&r=g
             // note: the url does NOT have something like .jpg
-            return 'http://www.gravatar.com/avatar/' . md5(strtolower(trim($this->user_email))) . "?s=$s&d=$d&r=$r&f=y";
+            return 'http://www.gravatar.com/avatar/' . md5(strtolower(trim($_SESSION['user_email']))) . "?s=$s&d=$d&r=$r&f=y";
         } else {
             return '';
         }
@@ -794,9 +754,9 @@ class Login
      */
     private function registerNewUser($user_name, $user_email, $user_password, $user_password_repeat, $captcha)
     {
-        // we just remove extra space on username and email
-        $user_name  = trim($user_name);
-        $user_email = trim($user_email);
+        // prevent database flooding
+        $user_name = substr(trim($user_name), 0, 64);
+        $user_email = substr(trim($user_email), 0, 254);
 
         // check provided data validity
         // TODO: check for "return true" case early, so put this first
@@ -812,7 +772,7 @@ class Login
             $this->errors[] = MESSAGE_PASSWORD_TOO_SHORT;
         } elseif (strlen($user_name) > 64 || strlen($user_name) < 2) {
             $this->errors[] = MESSAGE_USERNAME_BAD_LENGTH;
-        } elseif (!preg_match('/^[a-z\d]{2,64}$/i', $user_name)) {
+        } elseif (!preg_match('/^[a-z\d]{2,64}$/i', $user_name)) { // preg_match("/^[a-zA-Z0-9]{2,64}$/", $input_line, $output_array); // _.\-
             $this->errors[] = MESSAGE_USERNAME_INVALID;
         } elseif (empty($user_email)) {
             $this->errors[] = MESSAGE_EMAIL_EMPTY;
@@ -840,15 +800,8 @@ class Login
 
             // Ok user can be create
             } else {
-                // check if we have a constant HASH_COST_FACTOR defined (in config/hashing.php),
-                // if so: put the value into $hash_cost_factor, if not, make $hash_cost_factor = null
-                $hash_cost_factor = (defined('HASH_COST_FACTOR') ? HASH_COST_FACTOR : null);
-
-                // crypt the user's password with the PHP 5.5's password_hash() function, results in a 60 character hash string
-                // the PASSWORD_DEFAULT constant is defined by the PHP 5.5, or if you are using PHP 5.3/5.4, by the password hashing
-                // compatibility library. the third parameter looks a little bit shitty, but that's how those PHP 5.5 functions
-                // want the parameter: as an array with, currently only used with 'cost' => XX.
-                $user_password_hash = password_hash($user_password, PASSWORD_DEFAULT, array('cost' => $hash_cost_factor));
+                // crypt the user's password with the PHP 5.5's password_hash() function.
+                $user_password_hash = $this->getPasswordHash($user_password);
                 // generate random hash for email verification (40 char string)
                 $user_activation_hash = sha1(uniqid(mt_rand(), true));
 
@@ -920,7 +873,8 @@ class Login
         $mail->AddAddress($user_email);
         $mail->Subject = EMAIL_VERIFICATION_SUBJECT;
 
-        $link = EMAIL_VERIFICATION_URL.'?id='.urlencode($user_id).'&verification_code='.urlencode($user_activation_hash);
+        $link = 'http://' . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'];
+        $link .= ((strstr($link, '?') === false) ? '?' : '&') . 'id=' . urlencode($user_id) . '&verification_code=' . urlencode($user_activation_hash);
 
         // the link to your register.php, please set this value in config/email_verification.php
         $mail->Body = EMAIL_VERIFICATION_CONTENT.' '.$link;
