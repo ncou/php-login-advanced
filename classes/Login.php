@@ -1,10 +1,9 @@
 <?php
-
 /**
  * handles the user login/logout/session
- * @author Panique
- * @link http://www.php-login.net
- * @link https://github.com/panique/php-login-advanced/
+ * @author devplanete (2013 - 2014)
+ * @author Panique (2012 - 2013)
+ * @link https://github.com/devplanete/php-login-advanced
  * @license http://opensource.org/licenses/MIT MIT License
  */
 class Login
@@ -24,11 +23,7 @@ class Login
     /**
      * @var bool success state of registration
      */
-    public  $registration_successful  = false;
-    /**
-     * @var bool success state of verification
-     */
-    public  $verification_successful  = false;
+    private $registration_successful = false;
     /**
      * @var array $errors Collection of error messages
      */
@@ -97,12 +92,13 @@ class Login
         }
 
         // checking if user requested a password reset mail
+        if (isset($_REQUEST["user_name"]) && isset($_REQUEST["verification_code"])) {
+            $this->checkIfEmailVerificationCodeIsValid($_REQUEST["user_name"], $_REQUEST["verification_code"]);
+        }
         if (isset($_POST["request_password_reset"]) && isset($_POST['user_name'])) {
             $this->setPasswordResetDatabaseTokenAndSendMail($_POST['user_name']);
-        } elseif (isset($_GET["user_name"]) && isset($_GET["verification_code"])) {
-            $this->checkIfEmailVerificationCodeIsValid($_GET["user_name"], $_GET["verification_code"]);
         } elseif (isset($_POST["submit_new_password"])) {
-            $this->editNewPassword($_POST['user_name'], $_POST['user_password_reset_hash'], $_POST['user_password_new'], $_POST['user_password_repeat']);
+            $this->editNewPassword($_POST['user_name'], $_POST['verification_code'], $_POST['user_password_new'], $_POST['user_password_repeat']);
         }
     }
 
@@ -185,7 +181,39 @@ class Login
         // the PASSWORD_DEFAULT constant is defined by the PHP 5.5, or if you are using PHP 5.3/5.4, by the password hashing
         // compatibility library. the third parameter looks a little bit shitty, but that's how those PHP 5.5 functions
         // want the parameter: as an array with, currently only used with 'cost' => XX.
-        return password_hash($user_password_new, PASSWORD_DEFAULT, array('cost' => $hash_cost_factor));
+        return password_hash($password, PASSWORD_DEFAULT, array('cost' => $hash_cost_factor));
+    }
+
+    /**
+     * Create a PHPMailer Object with configuration of config.php
+     * @return PHPMailer Object
+     */
+    private function getPHPMailerObject()
+    {
+        $mail = new PHPMailer;
+
+        // please look into the config/config.php for much more info on how to use this!
+        // use SMTP or use mail()
+        if (EMAIL_USE_SMTP) {
+            // Set mailer to use SMTP
+            $mail->IsSMTP();
+            //useful for debugging, shows full SMTP errors
+            //$mail->SMTPDebug = 1; // debugging: 1 = errors and messages, 2 = messages only
+            // Enable SMTP authentication
+            $mail->SMTPAuth = EMAIL_SMTP_AUTH;
+            // Enable encryption, usually SSL/TLS
+            if (defined(EMAIL_SMTP_ENCRYPTION)) {
+                $mail->SMTPSecure = EMAIL_SMTP_ENCRYPTION;
+            }
+            // Specify host server
+            $mail->Host = EMAIL_SMTP_HOST;
+            $mail->Username = EMAIL_SMTP_USERNAME;
+            $mail->Password = EMAIL_SMTP_PASSWORD;
+            $mail->Port = EMAIL_SMTP_PORT;
+        } else {
+            $mail->IsMail();
+        }
+        return $mail;
     }
 
     /**
@@ -306,7 +334,7 @@ class Login
                         // calculate new hash with new cost factor
                         $user_password_hash = $this->getPasswordHash($user_password);
 
-                        // TODO: this should be put into another method !?
+                        // save the new password hash into database
                         $query_update = $this->db_connection->prepare('UPDATE users SET user_password_hash = :user_password_hash WHERE user_id = :user_id');
                         $query_update->bindValue(':user_password_hash', $user_password_hash, PDO::PARAM_STR);
                         $query_update->bindValue(':user_id', $result_row->user_id, PDO::PARAM_INT);
@@ -422,8 +450,7 @@ class Login
             $this->errors[] = MESSAGE_USERNAME_SAME_LIKE_OLD_ONE;
 
         // username cannot be empty and must be azAZ09 and 2-64 characters
-        // TODO: maybe this pattern should also be implemented in Registration.php (or other way round)
-        } elseif (empty($user_name) || !preg_match("/^(?=.{2,64}$)[a-zA-Z][a-zA-Z0-9]*(?: [a-zA-Z0-9]+)*$/", $user_name)) {
+        } elseif (empty($user_name) || !preg_match('/^[a-zA-Z0-9]{2,64}$/', $user_name)) {
             $this->errors[] = MESSAGE_USERNAME_INVALID;
 
         } else {
@@ -589,36 +616,15 @@ class Login
      */
     public function sendPasswordResetMail($user_name, $user_email, $user_password_reset_hash)
     {
-        $mail = new PHPMailer;
-
-        // please look into the config/config.php for much more info on how to use this!
-        // use SMTP or use mail()
-        if (EMAIL_USE_SMTP) {
-            // Set mailer to use SMTP
-            $mail->IsSMTP();
-            //useful for debugging, shows full SMTP errors
-            //$mail->SMTPDebug = 1; // debugging: 1 = errors and messages, 2 = messages only
-            // Enable SMTP authentication
-            $mail->SMTPAuth = EMAIL_SMTP_AUTH;
-            // Enable encryption, usually SSL/TLS
-            if (defined(EMAIL_SMTP_ENCRYPTION)) {
-                $mail->SMTPSecure = EMAIL_SMTP_ENCRYPTION;
-            }
-            // Specify host server
-            $mail->Host = EMAIL_SMTP_HOST;
-            $mail->Username = EMAIL_SMTP_USERNAME;
-            $mail->Password = EMAIL_SMTP_PASSWORD;
-            $mail->Port = EMAIL_SMTP_PORT;
-        } else {
-            $mail->IsMail();
-        }
+        $mail = $this->getPHPMailerObject();
 
         $mail->From = EMAIL_PASSWORDRESET_FROM;
         $mail->FromName = EMAIL_PASSWORDRESET_FROM_NAME;
         $mail->AddAddress($user_email);
         $mail->Subject = EMAIL_PASSWORDRESET_SUBJECT;
 
-        $link = EMAIL_PASSWORDRESET_URL.'?user_name='.urlencode($user_name).'&verification_code='.urlencode($user_password_reset_hash);
+        $link = 'http://' . $_SERVER['HTTP_HOST'] . $_SERVER['SCRIPT_NAME'] . '?password_reset';
+        $link .= '&user_name=' . urlencode($user_name) . '&verification_code=' . urlencode($user_password_reset_hash);
         $mail->Body = EMAIL_PASSWORDRESET_CONTENT . ' ' . $link;
 
         if(!$mail->Send()) {
@@ -702,22 +708,29 @@ class Login
 
     /**
      * Gets the success state of the password-reset-link-validation.
-     * TODO: should be more like getPasswordResetLinkValidationStatus
      * @return boolean
      */
-    public function passwordResetLinkIsValid()
+    public function isPasswordResetLinkValid()
     {
         return $this->password_reset_link_is_valid;
     }
 
     /**
      * Gets the success state of the password-reset action.
-     * TODO: should be more like getPasswordResetSuccessStatus
      * @return boolean
      */
-    public function passwordResetWasSuccessful()
+    public function isPasswordResetSuccessful()
     {
         return $this->password_reset_was_successful;
+    }
+
+    /**
+     * Gets the success state of registration action.
+     * @return boolean
+     */
+    public function isRegistrationSuccessful()
+    {
+        return $this->registration_successful;
     }
 
     /**
@@ -744,10 +757,6 @@ class Login
         }
     }
 
-    // ------------------------------------------------------------------------------------------------------
-    // Registration part
-    // ------------------------------------------------------------------------------------------------------
-
     /**
      * handles the entire registration process. checks all error possibilities, and creates a new user in the database if
      * everything is fine
@@ -759,7 +768,6 @@ class Login
         $user_email = substr(trim($user_email), 0, 254);
 
         // check provided data validity
-        // TODO: check for "return true" case early, so put this first
         if (strtolower($captcha) != strtolower($_SESSION['captcha'])) {
             $this->errors[] = MESSAGE_CAPTCHA_WRONG;
         } elseif (empty($user_name)) {
@@ -772,7 +780,7 @@ class Login
             $this->errors[] = MESSAGE_PASSWORD_TOO_SHORT;
         } elseif (strlen($user_name) > 64 || strlen($user_name) < 2) {
             $this->errors[] = MESSAGE_USERNAME_BAD_LENGTH;
-        } elseif (!preg_match('/^[a-z\d]{2,64}$/i', $user_name)) { // preg_match("/^[a-zA-Z0-9]{2,64}$/", $input_line, $output_array); // _.\-
+        } elseif (!preg_match('/^[a-zA-Z0-9]{2,64}$/', $user_name)) {
             $this->errors[] = MESSAGE_USERNAME_INVALID;
         } elseif (empty($user_email)) {
             $this->errors[] = MESSAGE_EMAIL_EMPTY;
@@ -784,11 +792,11 @@ class Login
         // finally if all the above checks are ok
         } else {
             // check if username already exists
-			$result_row = $this->getUserData($user_name);
+            $result_row = $this->getUserData($user_name);
             // if this user exists
             if (isset($result_row->user_id)) {
                 $this->errors[] = MESSAGE_USERNAME_EXISTS;
-				return;
+                return;
             // check if email already in use
             } else {
                 $result_row = $this->getUserDataFromEmail($user_email);
@@ -844,37 +852,15 @@ class Login
      */
     public function sendVerificationEmail($user_id, $user_email, $user_activation_hash)
     {
-        $mail = new PHPMailer;
-
-        // please look into the config/config.php for much more info on how to use this!
-        // use SMTP or use mail()
-        if (EMAIL_USE_SMTP) {
-            // Set mailer to use SMTP
-            $mail->IsSMTP();
-            //useful for debugging, shows full SMTP errors
-            //$mail->SMTPDebug = 1; // debugging: 1 = errors and messages, 2 = messages only
-            // Enable SMTP authentication
-            $mail->SMTPAuth = EMAIL_SMTP_AUTH;
-            // Enable encryption, usually SSL/TLS
-            if (defined(EMAIL_SMTP_ENCRYPTION)) {
-                $mail->SMTPSecure = EMAIL_SMTP_ENCRYPTION;
-            }
-            // Specify host server
-            $mail->Host = EMAIL_SMTP_HOST;
-            $mail->Username = EMAIL_SMTP_USERNAME;
-            $mail->Password = EMAIL_SMTP_PASSWORD;
-            $mail->Port = EMAIL_SMTP_PORT;
-        } else {
-            $mail->IsMail();
-        }
+        $mail = $this->getPHPMailerObject();
 
         $mail->From = EMAIL_VERIFICATION_FROM;
         $mail->FromName = EMAIL_VERIFICATION_FROM_NAME;
         $mail->AddAddress($user_email);
         $mail->Subject = EMAIL_VERIFICATION_SUBJECT;
 
-        $link = 'http://' . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'];
-        $link .= ((strstr($link, '?') === false) ? '?' : '&') . 'id=' . urlencode($user_id) . '&verification_code=' . urlencode($user_activation_hash);
+        $link = 'http://' . $_SERVER['HTTP_HOST'] . $_SERVER['SCRIPT_NAME'];
+        $link .= '?id=' . urlencode($user_id) . '&verification_code=' . urlencode($user_activation_hash);
 
         // the link to your register.php, please set this value in config/email_verification.php
         $mail->Body = EMAIL_VERIFICATION_CONTENT.' '.$link;
@@ -901,7 +887,6 @@ class Login
             $query_update_user->execute();
 
             if ($query_update_user->rowCount() > 0) {
-                $this->verification_successful = true;
                 $this->messages[] = MESSAGE_REGISTRATION_ACTIVATION_SUCCESSFUL;
             } else {
                 $this->errors[] = MESSAGE_REGISTRATION_ACTIVATION_NOT_SUCCESSFUL;
