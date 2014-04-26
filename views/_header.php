@@ -36,19 +36,14 @@
 	</style>
 </head>
 <body>
-
 <?php
 // show potential errors / feedback (from login object)
 if (isset($login)) {
-    if ($login->errors) {
-        foreach ($login->errors as $error) {
-            echo "<div class=\"login_error\">$error</div>\n";
-        }
+    foreach ($login->errors as $error) {
+        echo "<div class=\"login_error\">$error</div>\n";
     }
-    if ($login->messages) {
-        foreach ($login->messages as $message) {
-            echo "<div class=\"login_message\">$message</div>\n";
-        }
+
+    foreach ($login->messages as $message) {
+        echo "<div class=\"login_message\">$message</div>\n";
     }
 }
-?>
