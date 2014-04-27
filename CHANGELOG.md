@@ -1,5 +1,11 @@
 # CHANGE LOG
 
+**April 26th 2014**
+- create unique php file entry point
+
+**April 23th 2014**
+- cleaning and simplification of code
+
 **April 22th 2014**
 - merge Registration class into Login class
 
