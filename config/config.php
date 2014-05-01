@@ -117,5 +117,5 @@ define("HASH_COST_FACTOR", "10");
  * ALLOW_USER_REGISTRATION: If set to false, new users cannot registred and registration link is not displayed.
  * ALLOW_ADMIN_TO_REGISTER_NEW_USER: Administrator (user with an access level of 255) can create new users.
  */
-define("ALLOW_USER_REGISTRATION", false);
+define("ALLOW_USER_REGISTRATION", true);
 define("ALLOW_ADMIN_TO_REGISTER_NEW_USER", true);
