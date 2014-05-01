@@ -11,6 +11,8 @@ A simple, but secure PHP login script with many features includes :
 - "remember me" / stay logged in cookies
 - **"remember me" supports parallel login from multiple devices <- NEW**
 - **i18n/internationalization: English, French at the moment but it's easy to add a new language <- NEW**
+- **possibility to manage some user access levels <- NEW**
+- **a beautiful CSS style <-NEW**
 - gravatars
 
 IT stuffs...
