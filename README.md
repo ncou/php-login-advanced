@@ -25,6 +25,7 @@ You can also visit [Professional MVC Version](https://github.com/panique/php-log
 ## Live-demo
 
 No live demo page available at the moment
+![Example screenshot](https://cloud.githubusercontent.com/assets/5228432/2852514/5cdb4126-d136-11e3-802e-c3ade2455cb5.png)
 
 ## Requirements
 
