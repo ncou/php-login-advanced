@@ -4,7 +4,7 @@
 - new beautiful style
 - new field user_access_level in user table to manage user access right
 - new registration options to disable user registration and allow administrators to register users
-- 
+
 **April 26th 2014**
 - create unique php file entry point
 
