@@ -110,3 +110,12 @@ define("EMAIL_VERIFICATION_CONTENT", "Please click on this link to activate your
  * This constant will be used in the login and the registration class.
  */
 define("HASH_COST_FACTOR", "10");
+
+/**
+ * Configuration for: Registration
+ *
+ * ALLOW_USER_REGISTRATION: If set to false, new users cannot registred and registration link is not displayed.
+ * ALLOW_ADMIN_TO_REGISTER_NEW_USER: Administrator (user with an access level of 255) can create new users.
+ */
+define("ALLOW_USER_REGISTRATION", false);
+define("ALLOW_ADMIN_TO_REGISTER_NEW_USER", true);
