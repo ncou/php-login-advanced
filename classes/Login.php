@@ -6,7 +6,7 @@
  * @link https://github.com/devplanete/php-login-advanced
  * @license http://opensource.org/licenses/MIT MIT License
  */
-class Login
+class PHPLogin
 {
     /**
      * @var object $db_connection The database connection
@@ -35,13 +35,40 @@ class Login
 
     /**
      * the function "__construct()" automatically starts whenever an object of this class is created,
-     * you know, when you do "$login = new Login();"
+     * you know, when you do "$login = new PHPLogin();"
      */
     public function __construct()
     {
+        // check for minimum PHP version
+        if (version_compare(PHP_VERSION, '5.3.7', '<')) {
+            exit('Sorry, this script does not run on a PHP version smaller than 5.3.7 !');
+        } else if (version_compare(PHP_VERSION, '5.5.0', '<')) {
+            // if you are using PHP 5.3 or PHP 5.4 you have to include the password_api_compatibility_library.php
+            // (this library adds the PHP 5.5 password hashing functions to older versions of PHP)
+            require_once(__DIR__ .'/libraries/password_compatibility_library.php');
+        }
+
+        // include the config
+        require_once(__DIR__ .'/config/config.php');
+
+        // include the to-be-used language. feel free to translate your project and include something else.
+        // detection of the language for the current user/browser
+        $user_lang = substr($_SERVER['HTTP_ACCEPT_LANGUAGE'], 0, 2);
+        // if translation file for the detected language doesn't exist, we use default english file
+        require_once(__DIR__ .'/translations/' . (file_exists(__DIR__ .'/translations/' . $user_lang . '.php') ? $user_lang : 'en') . '.php');
+
         // create/read session
         @session_start();
 
+        // Execute login/registration action
+        $this->ExecuteAction();
+    }
+
+    /**
+     * this function looks into $_POST and $_GET to execute the corresponding login/registration action.
+     */
+    private function ExecuteAction()
+    {
         // if we have such a POST request, call the registerNewUser() method
         if (isset($_POST["register"]) && (ALLOW_USER_REGISTRATION || (ALLOW_ADMIN_TO_REGISTER_NEW_USER && $_SESSION['user_access_level'] == 255))) {
             $this->registerNewUser($_POST['user_name'], $_POST['user_email'], $_POST['user_password_new'], $_POST['user_password_repeat'], $_POST["captcha"]);
@@ -190,11 +217,13 @@ class Login
      */
     private function getPHPMailerObject()
     {
+        require_once(__DIR__ .'/libraries/PHPMailer.php');
         $mail = new PHPMailer;
 
         // please look into the config/config.php for much more info on how to use this!
         // use SMTP or use mail()
         if (EMAIL_USE_SMTP) {
+            require_once(__DIR__ .'/libraries/SMTP.php');
             // Set mailer to use SMTP
             $mail->IsSMTP();
             //useful for debugging, shows full SMTP errors
