@@ -59,16 +59,19 @@
 		margin-bottom: 15px;
 	}
 	.login_error {
-		background: #f36971 url(views/error.png) no-repeat center left;
-		padding: 3px 8px 3px 24px;
+		background: #EAD3D6 url(views/error.png) no-repeat center left;
+		border: 1px solid #f36971;
+		padding: 5px 8px 5px 24px;
 		display: inline-block;
 		*display: inline; /* display:inline-block is not supported by IE7 */
 		border-radius: 3px;
 		margin-bottom: 7px;
 	}
 	.login_message {
-		background: #99daea url(views/info.png) no-repeat center left;
-		padding: 3px 8px 3px 24px;
+		background: #dff0d8 url(views/info.png) no-repeat center left;
+		border: 1px solid #d0e5ca;
+		color: #468847;
+		padding: 5px 8px 5px 24px;
 		display: inline-block;
 		*display: inline; /* display:inline-block is not supported by IE7 */
 		border-radius: 3px;		
