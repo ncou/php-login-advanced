@@ -6,11 +6,11 @@
  * @license http://opensource.org/licenses/MIT MIT License
  */
 
-// load php-login components
-require_once("php-login.php");
+// load php-login class
+require_once("PHPLogin.php");
 // the login object will do all login/logout stuff automatically
 // so this single line handles the entire login process.
-$login = new Login();
+$login = new PHPLogin();
 
 include('views/_header.php');
 
