@@ -1,6 +1,7 @@
 # CHANGE LOG
 
 **May 25th 2014**
+- update PHPMailer.php from version 5.2.6 to 5.2.7
 - add Russian translation file
 
 **May 11th 2014**
