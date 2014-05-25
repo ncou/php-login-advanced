@@ -1,5 +1,8 @@
 # CHANGE LOG
 
+**May 25th 2014**
+- add Russian translation file
+
 **May 11th 2014**
 - class in now called `PHPLogin` in replacement of only `Login`
 - constructor automatically loads config, librairies and language files
