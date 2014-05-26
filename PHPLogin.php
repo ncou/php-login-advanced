@@ -70,7 +70,7 @@ class PHPLogin
     private function ExecuteAction()
     {
         // if we have such a POST request, call the registerNewUser() method
-        if (isset($_POST["register"]) && (ALLOW_USER_REGISTRATION || (ALLOW_ADMIN_TO_REGISTER_NEW_USER && $_SESSION['user_access_level'] == 255))) {
+        if (isset($_POST["captcha"]) && isset($_POST["register"]) && (ALLOW_USER_REGISTRATION || (ALLOW_ADMIN_TO_REGISTER_NEW_USER && $_SESSION['user_access_level'] == 255))) {
             $this->registerNewUser($_POST['user_name'], $_POST['user_email'], $_POST['user_password_new'], $_POST['user_password_repeat'], $_POST["captcha"]);
         // if we have such a GET request, call the verifyNewUser() method
         } else if (isset($_GET["id"]) && isset($_GET["verification_code"])) {
@@ -259,7 +259,7 @@ class PHPLogin
                 // cookie looks good, try to select corresponding user
                 if ($this->databaseConnection()) {
                     // get real token from database (and all other data)
-                    $sth = $this->db_connection->prepare("SELECT u.user_id, u.user_name, u.user_email, u.user_access_level FROM user_connections uc 
+                    $sth = $this->db_connection->prepare("SELECT u.user_id, u.user_name, u.user_email, u.user_access_level FROM user_connections uc
                                                           LEFT JOIN users u ON uc.user_id = u.user_id WHERE uc.user_id = :user_id
                                                           AND uc.user_rememberme_token = :user_rememberme_token AND uc.user_rememberme_token IS NOT NULL");
                     $sth->bindValue(':user_id', $user_id, PDO::PARAM_INT);
