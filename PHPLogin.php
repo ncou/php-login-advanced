@@ -771,10 +771,11 @@ class PHPLogin
      * For deeper info on the different parameter possibilities:
      * @see http://de.gravatar.com/site/implement/images/
      *
-     * @param string $s Size in pixels, defaults to 50px [ 1 - 2048 ]
+     * @param int|string $s Size in pixels, defaults to 50px [ 1 - 2048 ]
      * @param string $d Default imageset to use [ 404 | mm | identicon | monsterid | wavatar ]
      * @param string $r Maximum rating (inclusive) [ g | pg | r | x ]
      * @source http://gravatar.com/site/implement/images/php/
+     * @return string
      */
     public function getGravatarImageUrl($s = 50, $d = 'mm', $r = 'g')
     {
