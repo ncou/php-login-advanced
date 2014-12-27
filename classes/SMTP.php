@@ -24,6 +24,7 @@
  * @author Chris Ryan <unknown@example.com>
  * @author Marcus Bointon <phpmailer@synchromedia.co.uk>
  */
+namespace Login\Mail;
 class SMTP
 {
     /**
