@@ -8,11 +8,11 @@
         }
     ],
     "require": {
-        "php": ">=5.3.3"
+        "php": ">=5.3.7"
     },
     "autoload": {
         "psr-4": {
 		    	"Login\\": "classes/"
-    		}
+    	}
     }
 }
