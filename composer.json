@@ -12,7 +12,7 @@
     },
     "autoload": {
         "psr-4": {
-		    	"Login\\": "classes/"
+		"austinkregel/php-login-advanced": ""
     	}
     }
 }
