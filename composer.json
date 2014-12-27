@@ -17,7 +17,7 @@
     "autoload": {
         "psr-4": {
 		"Login\\": "classess/",
-		"Login\\Mail":"classes/"
+		"Login\\Mail\\":"classes/"
     	}
     }
 }
