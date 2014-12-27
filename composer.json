@@ -3,20 +3,21 @@
     "description": "PHP is a login class made simple for all users.",
     "type":"library",
     "Version":"0.0.1",
-    "authors": 
+    "authors": [
         {
             "name": "Austin Kregel",
             "email": "austinkregel@gmail.com",
             "homepage":"http://austinkregel.com",
             "role": "Developer"
         }
-    ,
+    ],
     "require": {
         "php": ">=5.3.7"
     },
     "autoload": {
         "psr-4": {
-		"austinkregel/php-login-advanced": "./"
+		"Login\\": "classess/",
+		"Login\\Mail":"classes/"
     	}
     }
 }
