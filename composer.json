@@ -18,10 +18,9 @@
         "psr-4": {
 		"Login\\": "classes/",
 		"Login\\Mail\\":"classes/"
-    	},
-    	"files": {
+    	}, "files": [
 	        "config/config.php",
 	        "config/autoload.php"
-    	}
+    	]
     }
 }
