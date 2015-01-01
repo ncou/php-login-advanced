@@ -19,5 +19,9 @@
 		"Login\\": "classess/",
 		"Login\\Mail\\":"classes/"
     	}
+    	"files": [
+	        "config/config.php",
+	        "config/autoload.php"
+    	]
     }
 }
