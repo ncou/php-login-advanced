@@ -69,7 +69,7 @@ You can also visit [Professional MVC Version](https://github.com/panique/php-log
 
 ## Live-demo
 
-No live demo page available at the moment
+A live demo can be seen here at [austinkregel.com](http://php-login.austinkregel.com/). Please note that the database, truncates (deletes all data) form itself every 2 weeks.
 
 ## Requirements
 
@@ -140,7 +140,7 @@ If you look into the code and at the file/folder-structure everything should be 
 
 ## License
 
-Licensed under [MIT](http://www.opensource.org/licenses/mit-license.php). You can use this script for free for any
+Licensed under [MIT](http://www.opensource.org/licenses/mit-license.php). You can use this script for free fodr any
 private or commercial projects.
 
 ## Contribute
