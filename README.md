@@ -36,7 +36,7 @@ if (isset($_GET['register']) && ! $login->isRegistrationSuccessful() &&
 
 // the user is not logged in, we show the login form
 } else {
-    include($dir .'/views/login.php');
+    include($dir .'/views/not_logged_in.php');
 }
 
 include($dir.'/views/_footer.php')
