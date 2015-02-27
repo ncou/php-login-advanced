@@ -2,6 +2,12 @@
 
 This script is base on [PHP-Login-Advanced](https://github.com/panique/php-login-advanced) who is not maintained anymore.
 
+Please note that this is a [Composer based](https://getcomposer.org) application. Once composer is intalled on your server, run `composer install` in the directory of this app. It will then install the requirements, you can now follow the instructions below.
+
+## Live-demo
+
+A live demo can be seen here at [austinkregel.com](http://php-login.austinkregel.com/). Please note that the database, truncates (deletes all data) form itself every 2 weeks.
+
 If you're going to use this script, I recommend having this in the main page, from whereever you're loading your script. 
 ```php
 <?php
@@ -67,9 +73,6 @@ You can also visit [Professional MVC Version](https://github.com/panique/php-log
 
 ![Example screenshot](https://cloud.githubusercontent.com/assets/5228432/2852514/5cdb4126-d136-11e3-802e-c3ade2455cb5.png)
 
-## Live-demo
-
-A live demo can be seen here at [austinkregel.com](http://php-login.austinkregel.com/). Please note that the database, truncates (deletes all data) form itself every 2 weeks.
 
 ## Requirements
 
