@@ -1,3 +1,16 @@
+## A Message from Austin (This fork's owner)
+
+I wanted to note that I am thinking about updating the stylings, I think it looks a little out dated compaired to my other works (I know I didn't style it but I still claim this fork) So I am going to launch several branches listed below.
+  
+  +  Make a verison for Bootstrap
+  +  Make a Flat UI version
+  +  Make a Material Design version
+  +  Make a simple, or little css version
+
+I plan to make these changes because I have recieved several emails asking for help, and I don't feel right installing this script, I honestly don't so to make myself feel better about it all, I will be making my own changes and then I can claim this as (partially) my own.
+
+If there is a design style you like that I didn't list above or you can't find anywhere else, email me either from [my website](http://austinkregel.com) or from my [github email](http://github.com/austinkregel) located on my github page and link a few images featuring the design so I know how to design it. 
+
 ## A PHP login script (ADVANCED VERSION)
 
 This script is base on [PHP-Login-Advanced](https://github.com/panique/php-login-advanced) who is not maintained anymore.
