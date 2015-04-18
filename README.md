@@ -58,7 +58,7 @@ if (isset($_GET['register']) && ! $login->isRegistrationSuccessful() &&
     include($dir .'/views/not_logged_in.php');
 }
 
-include($dir.'/views/_footer.php')
+include($dir.'/views/_footer.php');
 
 ```
 
