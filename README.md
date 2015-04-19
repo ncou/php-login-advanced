@@ -2,7 +2,7 @@
 
 I wanted to note that I am thinking about updating the stylings, I think it looks a little out dated compaired to my other works (I know I didn't style it but I still claim this fork) So I am going to launch several branches listed below.
   
-  +  Make a verison for Bootstrap
+  +  ~~Make a verison for Bootstrap~~ [Bootstrap version](https://github.com/austinkregel/php-login-advanced/tree/bootstrap-master)
   +  Make a Flat UI version
   +  Make a Material Design version
   +  Make a simple, or little css version
