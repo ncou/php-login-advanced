@@ -2,7 +2,7 @@
     "name": "austinkregel/php-login-advanced",
     "description": "PHP is a login class made simple for all users.",
     "type":"library",
-    "Version":"0.0.1",
+    "Version":"1.0",
     "authors": [
         {
             "name": "Austin Kregel",
