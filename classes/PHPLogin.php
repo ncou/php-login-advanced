@@ -50,7 +50,7 @@ class PHPLogin{
         } else if (version_compare(PHP_VERSION, '5.5.0', '<')) {
             // if you are using PHP 5.3 or PHP 5.4 you have to include the password_api_compatibility_library.php
             // (this library adds the PHP 5.5 password hashing functions to older versions of PHP)
-            require_once(dirname( __FILE__ ).'/libraries/password_compatibility_library.php');
+            require_once('../libraries/password_compatibility_library.php');
         }
 
         // include the config
@@ -59,7 +59,7 @@ class PHPLogin{
         // detection of the language for the current user/browser
         $user_lang = substr($_SERVER['HTTP_ACCEPT_LANGUAGE'], 0, 2);
         // if translation file for the detected language doesn't exist, we use default english file
-        require_once(dirname( __FILE__ ).'/../translations/' . (file_exists(dirname( __FILE__ ).'/../translations/' . $user_lang . '.php') ? $user_lang : 'en') . '.php');
+        require_once('../translations/' . (file_exists(dirname( __FILE__ ).'/../translations/' . $user_lang . '.php') ? $user_lang : 'en') . '.php');
 
         // create/read session
         @session_start();
@@ -224,13 +224,13 @@ class PHPLogin{
      */
     private function getPHPMailerObject()
     {
-        require_once(dirname( __FILE__ ).'/../classes/PHPMailer.php');
+        require_once('PHPMailer.php');
         $mail = new Mail\PHPMailer();
 
         // please look into the config/config.php for much more info on how to use this!
         // use SMTP or use mail()
         if (EMAIL_USE_SMTP) {
-            require_once(dirname( __FILE__ ).'/../classes/SMTP.php');
+            require_once('SMTP.php');
             // Set mailer to use SMTP
             $mail->IsSMTP();
             //useful for debugging, shows full SMTP errors
