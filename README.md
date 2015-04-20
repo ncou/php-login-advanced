@@ -1,3 +1,5 @@
+[![Dependency Status](https://www.versioneye.com/user/projects/55352a8f7f43bcd88900001a/badge.svg?style=flat)](https://www.versioneye.com/user/projects/55352a8f7f43bcd88900001a)
+
 ## A Message from Austin (This fork's owner)
 
 I wanted to note that I am thinking about updating the stylings, I think it looks a little out dated compaired to my other works (I know I didn't style it but I still claim this fork) So I am going to launch several branches listed below.
