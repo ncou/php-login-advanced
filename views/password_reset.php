@@ -1,6 +1,6 @@
 
-<fieldset>
-	<legend><?php echo WORDING_FORGOT_MY_PASSWORD; ?></legend>
+<div>
+	<h2><?php echo WORDING_FORGOT_MY_PASSWORD; ?></h2>
 	<form method="post" action="?password_reset">
 		<input type='hidden' name='user_name' value='<?php echo $_REQUEST['user_name']; ?>' />
 		<input type='hidden' name='verification_code' value='<?php echo $_REQUEST['verification_code']; ?>' />
@@ -12,5 +12,6 @@
 		<input id="user_password_repeat" type="password" name="user_password_repeat" pattern=".{6,}" required autocomplete="off" />
 		<input type="submit" name="submit_new_password" value="<?php echo WORDING_SUBMIT_NEW_PASSWORD; ?>" />
 	</form>
-</fieldset><br/>
+
 <a href="<?php echo $_SERVER['SCRIPT_NAME']; ?>"><?php echo WORDING_BACK_TO_LOGIN; ?></a>
+</div>
