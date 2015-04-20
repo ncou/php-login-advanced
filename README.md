@@ -1,3 +1,4 @@
+[![Build Status](https://travis-ci.org/austinkregel/php-login-advanced.svg?branch=master)](https://travis-ci.org/austinkregel/php-login-advanced)
 ## A Message from Austin (This fork's owner)
 
 I wanted to note that I am thinking about updating the stylings, I think it looks a little out dated compaired to my other works (I know I didn't style it but I still claim this fork) So I am going to launch several branches listed below.
