@@ -1,5 +1,5 @@
  [![Build Status](https://travis-ci.org/austinkregel/php-login-advanced.svg?branch=master)](https://travis-ci.org/austinkregel/php-login-advanced) 
- [![Dependency Status](https://www.versioneye.com/user/projects/553525177f43bc3f44000002/badge.svg?style=flat)]
+ ![Dependency Status](https://www.versioneye.com/user/projects/553525177f43bc3f44000002/badge.svg?style=flat)
  [![Packagist](https://img.shields.io/packagist/dt/austinkregel/php-login-advanced.svg)](https://packagist.org/packages/austinkregel/php-login-advanced)
 ## A Message from Austin (This fork's owner)
 
