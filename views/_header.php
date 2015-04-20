@@ -3,6 +3,7 @@
 <head>
 	<meta charset="UTF-8">
 	<title>php-login-advanced</title>
+	<script src='https://www.google.com/recaptcha/api.js'></script>
 	<style type="text/css">
 	/* just for the demo */
 	body {
