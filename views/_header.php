@@ -20,7 +20,7 @@
 		text-decoration: underline;
 		color: #00C;
 	}
-	fieldset {
+	.content {
 		display: inline-block;
 		text-align: left;
 		border: 1px solid #6fa3c4;
@@ -29,7 +29,7 @@
 		border-radius: 6px;
 		margin-bottom: 15px;
 	}
-	legend {
+	.content > h2 {
 		font-size: 1.2em;
 		font-weight: bold;
 	}
@@ -81,6 +81,7 @@
 	</style>
 </head>
 <body>
+<div class="content">
 <?php
 // show potential errors / feedback (from login object)
 if (isset($login)) {
@@ -93,3 +94,4 @@ if (isset($login)) {
     }
 }
 ?>
+
