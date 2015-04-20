@@ -1,5 +1,5 @@
 
-<fieldset>
+<div>
 <legend><?php echo WORDING_REGISTER; ?></legend>
 	<form method="post" action="?register">
 		<label for="user_name"><?php echo WORDING_REGISTRATION_USERNAME; ?></label>
@@ -18,5 +18,5 @@
 		<div class="g-recaptcha" data-sitekey="<?php echo RECAPTCHA_SITEKEY;?>"></div>
 		<input type="submit" name="register" value="<?php echo WORDING_REGISTER; ?>" />
 	</form>
-</fieldset><br/>
 <a href="<?php echo $_SERVER['SCRIPT_NAME']; ?>"><?php echo WORDING_BACK_TO_LOGIN; ?></a>
+</div>
