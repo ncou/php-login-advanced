@@ -1,7 +1,7 @@
 
-<fieldset>
-	<legend><?php echo WORDING_EDIT_USER_DATA; ?></legend>
-	<h2><?php echo $_SESSION['user_name']; ?> <?php echo WORDING_EDIT_YOUR_CREDENTIALS; ?></h2>
+<div>
+	<h2><?php echo WORDING_EDIT_USER_DATA; ?></h2>
+	<h3><?php echo $_SESSION['user_name']; ?> <?php echo WORDING_EDIT_YOUR_CREDENTIALS; ?></h3>
 
 	<!-- edit form for username / this form uses HTML5 attributes, like "required" and type="email" -->
 	<form method="post" action="?edit">
@@ -30,5 +30,5 @@
 
 		<input type="submit" name="user_edit_submit_password" value="<?php echo WORDING_CHANGE_PASSWORD; ?>" />
 	</form>
-</fieldset><br/>
+</div>
 <a href="<?php echo $_SERVER['SCRIPT_NAME']; ?>"><?php echo WORDING_BACK_TO_LOGIN; ?></a>
