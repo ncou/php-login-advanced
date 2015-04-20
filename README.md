@@ -1,4 +1,6 @@
- [![Build Status](https://travis-ci.org/austinkregel/php-login-advanced.svg?branch=master)](https://travis-ci.org/austinkregel/php-login-advanced) [![Dependency Status](https://www.versioneye.com/user/projects/553525177f43bc3f44000002/badge.svg?style=flat)](https://www.versioneye.com/user/projects/553525177f43bc3f44000002)
+ [![Build Status](https://travis-ci.org/austinkregel/php-login-advanced.svg?branch=master)](https://travis-ci.org/austinkregel/php-login-advanced) 
+ [![Dependency Status](https://www.versioneye.com/user/projects/553525177f43bc3f44000002/badge.svg?style=flat)](https://www.versioneye.com/user/projects/553525177f43bc3f44000002)
+ [![Packagist](https://img.shields.io/packagist/dt/austinkregel/php-login-advanced.svg)](https://packagist.org/packages/austinkregel/php-login-advanced)
 ## A Message from Austin (This fork's owner)
 
 I wanted to note that I am thinking about updating the stylings, I think it looks a little out dated compaired to my other works (I know I didn't style it but I still claim this fork) So I am going to launch several branches listed below.
