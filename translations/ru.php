@@ -74,7 +74,7 @@ define('WORDING_REGISTRATION_PASSWORD', 'Пароль (мин. 6 символо�
 define('WORDING_REGISTRATION_PASSWORD_REPEAT', 'Повторите пароль');
 define('WORDING_REGISTRATION_USERNAME', 'Ник (От 2 до 64 латинских символов и цифр)');
 define('WORDING_REMEMBER_ME', 'Запомнить меня');
-define('WORDING_REQUEST_PASSWORD_RESET', 'Сбросить пароль. Введите ваш ник и ждите письмо:');
+define('WORDING_REQUEST_PASSWORD_RESET', 'Сбросить пароль.<br/>Введите ваш или письмо ник и ждите письмо:');
 define('WORDING_RESET_PASSWORD', 'Сбросить пароль');
 define('WORDING_SUBMIT_NEW_PASSWORD', 'Подтвердить изменение пароля');
 define('WORDING_USERNAME', 'Ник');
