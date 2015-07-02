@@ -14,9 +14,9 @@ return array(
  * DB_PASS: the password of the above user
  */
   "DB_HOST" => "localhost",
-  "DB_NAME" => "php_login", 
-  "DB_USER" => "kregakxw_root",
-  "DB_PASS" => "CTU]Z8%@E*[0k?U-WK",
+  "DB_NAME" => "database", 
+  "DB_USER" => "user",
+  "DB_PASS" => "password",
 
 /**
  * Configuration for: Cookies
