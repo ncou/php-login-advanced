@@ -57,9 +57,10 @@ class PHPLogin{
       // include the config
     if($configLocation !== null) {
       $newConf = require $configLocation;
-      $config = (object)array_merge($config, $newConf);
+      $config = array_merge($config, $newConf);
     }
-    $this->config = (object)$config;
+    $this->config = (object) $config;
+    //dd($this->config);
     // include the to-be-used language. feel free to translate your project and include something else.
     // detection of the language for the current user/browser
     $user_lang = substr($_SERVER['HTTP_ACCEPT_LANGUAGE'], 0, 2);
