@@ -137,6 +137,6 @@ return array(
    *   Copy this "secret" code and paste it into "RECAPTCHA_SECRETKEY" where it says "Your secret key"
    * save the file and this is all set up
    */
-  'RECAPTCHA_SITEKEY' => 'Your site key'
+  'RECAPTCHA_SITEKEY' => 'Your site key',
   'RECAPTCHA_SECRETKEY' => 'Your secret key'
 );
