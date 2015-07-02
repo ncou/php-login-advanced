@@ -7,7 +7,13 @@
  */
   $dir = dirname( __FILE__ );
 // Load application config (error reporting, database credentials etc.)
-require $dir . '/config/config.php';
+function dd(){
+  echo '<pre>';
+  foreach(func_get_args() as $desc)
+    print_r($desc);
+  dir('</pre>');
+}
+//require $dir . '/config/config.php';
 // The auto-loader to load the php-login related internal stuff automatically
 require $dir .'/config/autoload.php';
 // The Composer auto-loader (official way to load Composer contents) to load external stuff automatically

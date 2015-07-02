@@ -57,8 +57,10 @@ class PHPLogin{
       // include the config
     if($configLocation !== null) {
       $newConf = require $configLocation;
-      $this->config = (object)array_merge($config, $newConf);
+      $config = array_merge($config, $newConf);
     }
+    $this->config = (object) $config;
+    //dd($this->config);
     // include the to-be-used language. feel free to translate your project and include something else.
     // detection of the language for the current user/browser
     $user_lang = substr($_SERVER['HTTP_ACCEPT_LANGUAGE'], 0, 2);
@@ -205,13 +207,13 @@ class PHPLogin{
   private function getPasswordHash($password) {
     // check if we have a constant HASH_COST_FACTOR defined (in config/config.php),
     // if so: put the value into $hash_cost_factor, if not, make $hash_cost_factor = null
-    $hash_cost_factor = (defined('HASH_COST_FACTOR') ? $this->config->HASH_COST_FACTOR : null);
+    $hash_cost_factor = ($this->config->HASH_COST_FACTOR ? $this->config->HASH_COST_FACTOR : null);
 
     // crypt the user's password with the PHP 5.5's password_hash() function, results in a 60 character hash string
     // the PASSWORD_DEFAULT constant is defined by the PHP 5.5, or if you are using PHP 5.3/5.4, by the password hashing
     // compatibility library. the third parameter looks a little bit shitty, but that's how those PHP 5.5 functions
     // want the parameter: as an array with, currently only used with 'cost' => XX.
-    return password_hash($password, $this->config->PASSWORD_DEFAULT, array('cost' => $hash_cost_factor));
+    return password_hash($password, PASSWORD_DEFAULT, array('cost' => $hash_cost_factor));
   }
 
   /**
@@ -768,34 +770,32 @@ class PHPLogin{
     
     // check provided data validity
     if ($this->verifyCaptcha(['response'=>$captcha]) !== true) {
-      $this->dd($this->errors[] = MESSAGE_CAPTCHA_WRONG);
+      ($this->errors[] = MESSAGE_CAPTCHA_WRONG);
     } elseif (empty($user_name)) {
-      $this->dd($this->errors[] = MESSAGE_USERNAME_EMPTY);
+      ($this->errors[] = MESSAGE_USERNAME_EMPTY);
     } elseif (empty($user_password) || empty($user_password_repeat)) {
-      $this->dd($this->errors[] = MESSAGE_PASSWORD_EMPTY);
-        
+      ($this->errors[] = MESSAGE_PASSWORD_EMPTY);
     } elseif ($user_password !== $user_password_repeat) {
-      $this->dd($this->errors[] = MESSAGE_PASSWORD_BAD_CONFIRM);
-         
+      ($this->errors[] = MESSAGE_PASSWORD_BAD_CONFIRM);
     } elseif (strlen($user_password) < 6) {
-      $this->dd($this->errors[] = MESSAGE_PASSWORD_TOO_SHORT);
+      ($this->errors[] = MESSAGE_PASSWORD_TOO_SHORT);
     } elseif (strlen($user_name) > 64 || strlen($user_name) < 2) {
-      $this->dd($this->errors[] = MESSAGE_USERNAME_BAD_LENGTH);
+      ($this->errors[] = MESSAGE_USERNAME_BAD_LENGTH);
     } elseif (!preg_match('/^[a-zA-Z0-9]{2,64}$/', $user_name)) {
-      $this->dd($this->errors[] = MESSAGE_USERNAME_INVALID);
+      ($this->errors[] = MESSAGE_USERNAME_INVALID);
     } elseif (empty($user_email)) {
-      $this->dd($this->errors[] = MESSAGE_EMAIL_EMPTY);
+      ($this->errors[] = MESSAGE_EMAIL_EMPTY);
     } elseif (strlen($user_email) > 254) {
-      $this->dd($this->errors[] = MESSAGE_EMAIL_TOO_LONG);
+      ($this->errors[] = MESSAGE_EMAIL_TOO_LONG);
     } elseif (!filter_var($user_email, FILTER_VALIDATE_EMAIL)) {
-      $this->dd($this->errors[] = MESSAGE_EMAIL_INVALID);
+      ($this->errors[] = MESSAGE_EMAIL_INVALID);
     // finally if all the above checks are ok
     } else {
       // check if username already exists
       $result_row = $this->getUserData($user_name);
       // if this user exists
       if (isset($result_row->user_id)) {
-        $this->dd($this->errors[] = MESSAGE_USERNAME_EXISTS);
+        ($this->errors[] = MESSAGE_USERNAME_EXISTS);
         return;
       // check if email already in use
       } else {
