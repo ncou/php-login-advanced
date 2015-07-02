@@ -42,7 +42,7 @@ class PHPLogin{
      * the function "__construct()" automatically starts whenever an object of this class is created,
      * you know, when you do "$login = new PHPLogin();"
      */
-    public function __construct()
+    public function __construct($configLocation = null)
     {
         // check for minimum PHP version
         if (version_compare(PHP_VERSION, '5.3.7', '<')) {
@@ -54,7 +54,11 @@ class PHPLogin{
         }
 
         // include the config
-
+	if($configLocation !== null) {
+            require($configLocation);
+        } else {
+            require(dirname(__DIR__) . '/config/config.php');
+        }
         // include the to-be-used language. feel free to translate your project and include something else.
         // detection of the language for the current user/browser
         $user_lang = substr($_SERVER['HTTP_ACCEPT_LANGUAGE'], 0, 2);
