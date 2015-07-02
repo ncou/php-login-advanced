@@ -17,7 +17,7 @@ return array(
   "DB_NAME" => "database", 
   "DB_USER" => "user",
   "DB_PASS" => "password",
-  'SITE_URL'=> 'php-login.austinkregel.com',
+  'SITE_URL'=> 'example.com',
 
 /**
  * Configuration for: Cookies
