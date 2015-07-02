@@ -38,6 +38,8 @@ class PHPLogin{
 	 * @var string the url for submitting captcha codes to
 	 */
 	public $captchaUrl = "https://www.google.com/recaptcha/api/siteverify";
+	
+	public $config = '';
   /**
    * the function "__construct()" automatically starts whenever an object of this class is created,
    * you know, when you do "$login = new PHPLogin();"
@@ -54,13 +56,10 @@ class PHPLogin{
     $config = require dirname(__DIR__) . '/config/config.php';
       // include the config
     if($configLocation !== null) {
-      $newConf = $configLocation;
-      foreach($newConf as $key => $value){
-        if($newConf[$key] !== $config[$key])
-          $config[$key] = $newConfig[$key];
-      }
+      $newConf = require $configLocation;
+      $config = (object)array_merge($config, $newConf);
     }
-    
+    $this->config = (object)$config;
     // include the to-be-used language. feel free to translate your project and include something else.
     // detection of the language for the current user/browser
     $user_lang = substr($_SERVER['HTTP_ACCEPT_LANGUAGE'], 0, 2);
@@ -79,7 +78,7 @@ class PHPLogin{
    */
   private function ExecuteAction() {
     // if we have such a POST request, call the registerNewUser() method
-    if (isset($_POST["g-recaptcha-response"]) && isset($_POST["register"]) && (ALLOW_USER_REGISTRATION || (ALLOW_ADMIN_TO_REGISTER_NEW_USER && $_SESSION['user_access_level'] == 255))) {
+    if (isset($_POST["g-recaptcha-response"]) && isset($_POST["register"]) && ($this->config->ALLOW_USER_REGISTRATION || ($this->config->ALLOW_ADMIN_TO_REGISTER_NEW_USER && $_SESSION['user_access_level'] == 255))) {
        
       $this->registerNewUser($_POST['user_name'], $_POST['user_email'], $_POST['user_password_new'], $_POST['user_password_repeat'], $_POST["g-recaptcha-response"]);
     // if we have such a GET request, call the verifyNewUser() method
@@ -152,7 +151,7 @@ class PHPLogin{
         // Also important: We include the charset, as leaving it out seems to be a security issue:
         // @see http://wiki.hashphp.org/PDO_Tutorial_for_MySQL_Developers#Connecting_to_MySQL says:
         // "Adding the charset to the DSN is very important for security reasons"
-        $this->db_connection = new PDO('mysql:host='. DB_HOST .';dbname='. DB_NAME . ';charset=utf8', DB_USER, DB_PASS);
+        $this->db_connection = new PDO('mysql:host='. $this->config->DB_HOST .';dbname='. $this->config->DB_NAME . ';charset=utf8', $this->config->DB_USER, $this->config->DB_PASS);
         return true;
       } catch (PDOException $e) {
           $this->errors[] = MESSAGE_DATABASE_ERROR . $e->getMessage();
@@ -207,13 +206,13 @@ class PHPLogin{
   private function getPasswordHash($password) {
     // check if we have a constant HASH_COST_FACTOR defined (in config/config.php),
     // if so: put the value into $hash_cost_factor, if not, make $hash_cost_factor = null
-    $hash_cost_factor = (defined('HASH_COST_FACTOR') ? HASH_COST_FACTOR : null);
+    $hash_cost_factor = (defined('HASH_COST_FACTOR') ? $this->config->HASH_COST_FACTOR : null);
 
     // crypt the user's password with the PHP 5.5's password_hash() function, results in a 60 character hash string
     // the PASSWORD_DEFAULT constant is defined by the PHP 5.5, or if you are using PHP 5.3/5.4, by the password hashing
     // compatibility library. the third parameter looks a little bit shitty, but that's how those PHP 5.5 functions
     // want the parameter: as an array with, currently only used with 'cost' => XX.
-    return password_hash($password, PASSWORD_DEFAULT, array('cost' => $hash_cost_factor));
+    return password_hash($password, $this->config->PASSWORD_DEFAULT, array('cost' => $hash_cost_factor));
   }
 
   /**
@@ -226,23 +225,23 @@ class PHPLogin{
 
     // please look into the config/config.php for much more info on how to use this!
     // use SMTP or use mail()
-    if (EMAIL_USE_SMTP) {
+    if ($this->config->EMAIL_USE_SMTP) {
       @require_once(dirname( __FILE__ ).'/SMTP.php');
       // Set mailer to use SMTP
       $mail->IsSMTP();
       //useful for debugging, shows full SMTP errors
       //$mail->SMTPDebug = 1; // debugging: 1 = errors and messages, 2 = messages only
       // Enable SMTP authentication
-      $mail->SMTPAuth = EMAIL_SMTP_AUTH;
+      $mail->SMTPAuth = $this->config->EMAIL_SMTP_AUTH;
       // Enable encryption, usually SSL/TLS
-      if (defined(EMAIL_SMTP_ENCRYPTION)) {
-          $mail->SMTPSecure = EMAIL_SMTP_ENCRYPTION;
+      if ($this->config->EMAIL_SMTP_ENCRYPTION === 'ssl' || $this->config->EMAIL_SMTP_ENCRYPTION==='tls') {
+        $mail->SMTPSecure = $this->config->EMAIL_SMTP_ENCRYPTION;
       }
       // Specify host server
-      $mail->Host = EMAIL_SMTP_HOST;
-      $mail->Username = EMAIL_SMTP_USERNAME;
-      $mail->Password = EMAIL_SMTP_PASSWORD;
-      $mail->Port = EMAIL_SMTP_PORT;
+      $mail->Host = $this->config->EMAIL_SMTP_HOST;
+      $mail->Username = $this->config->EMAIL_SMTP_USERNAME;
+      $mail->Password = $this->config->EMAIL_SMTP_PASSWORD;
+      $mail->Port = $this->config->EMAIL_SMTP_PORT;
     } else {
       $mail->IsMail();
     }
@@ -258,7 +257,7 @@ class PHPLogin{
       // extract data from the cookie
       list ($user_id, $token, $hash) = explode(':', $_COOKIE['rememberme']);
       // check cookie hash validity
-      if ($hash == hash('sha256', $user_id . ':' . $token . COOKIE_SECRET_KEY) && !empty($token)) {
+      if ($hash == hash('sha256', $user_id . ':' . $token . $this->config->COOKIE_SECRET_KEY) && !empty($token)) {
         // cookie looks good, try to select corresponding user
         if ($this->databaseConnection()) {
           // get real token from database (and all other data)
@@ -363,7 +362,7 @@ class PHPLogin{
         // check if the have defined a cost factor in config/hashing.php
         if (defined('HASH_COST_FACTOR')) {
           // check if the hash needs to be rehashed
-          if (password_needs_rehash($result_row->user_password_hash, PASSWORD_DEFAULT, array('cost' => HASH_COST_FACTOR))) {
+          if (password_needs_rehash($result_row->user_password_hash, $this->config->PASSWORD_DEFAULT, array('cost' => $this->config->HASH_COST_FACTOR))) {
 
             // calculate new hash with new cost factor
             $user_password_hash = $this->getPasswordHash($user_password);
@@ -414,11 +413,11 @@ class PHPLogin{
 
       // generate cookie string that consists of userid, randomstring and combined hash of both
       $cookie_string_first_part = $_SESSION['user_id'] . ':' . $random_token_string;
-      $cookie_string_hash = hash('sha256', $cookie_string_first_part . COOKIE_SECRET_KEY);
+      $cookie_string_hash = hash('sha256', $cookie_string_first_part . $this->config->COOKIE_SECRET_KEY);
       $cookie_string = $cookie_string_first_part . ':' . $cookie_string_hash;
 
       // set cookie
-      setcookie('rememberme', $cookie_string, time() + COOKIE_RUNTIME, "/", COOKIE_DOMAIN);
+      setcookie('rememberme', $cookie_string, time() + $this->config->COOKIE_RUNTIME, "/", $this->config->COOKIE_DOMAIN);
     }
   }
 
@@ -431,7 +430,7 @@ class PHPLogin{
       // extract data from the cookie
       list ($user_id, $token, $hash) = explode(':', $_COOKIE['rememberme']);
       // check cookie hash validity
-      if ($hash == hash('sha256', $user_id . ':' . $token . COOKIE_SECRET_KEY) && !empty($token)) {
+      if ($hash == hash('sha256', $user_id . ':' . $token . $this->config->COOKIE_SECRET_KEY) && !empty($token)) {
         // Reset rememberme token of this device
         $sth = $this->db_connection->prepare("DELETE FROM user_connections WHERE user_rememberme_token = :user_rememberme_token AND user_id = :user_id");
         $sth->bindValue(':user_id', $_SESSION['user_id'], PDO::PARAM_INT);
@@ -443,7 +442,7 @@ class PHPLogin{
     // set the rememberme-cookie to ten years ago (3600sec * 365 days * 10).
     // that's obivously the best practice to kill a cookie via php
     // @see http://stackoverflow.com/a/686166/1114320
-    setcookie('rememberme', false, time() - (3600 * 3650), '/', COOKIE_DOMAIN);
+    setcookie('rememberme', false, time() - (3600 * 3650), '/', $this->config->COOKIE_DOMAIN);
   }
 
   /**
@@ -630,14 +629,14 @@ class PHPLogin{
   public function sendPasswordResetMail($user_name, $user_email, $user_password_reset_hash) {
     $mail = $this->getPHPMailerObject();
     
-    $mail->From = EMAIL_PASSWORDRESET_FROM;
-    $mail->FromName = EMAIL_PASSWORDRESET_FROM_NAME;
+    $mail->From = $this->config->EMAIL_PASSWORDRESET_FROM;
+    $mail->FromName = $this->config->EMAIL_PASSWORDRESET_FROM_NAME;
     $mail->AddAddress($user_email);
-    $mail->Subject = EMAIL_PASSWORDRESET_SUBJECT;
+    $mail->Subject = $this->config->EMAIL_PASSWORDRESET_SUBJECT;
     
     $link = 'http://' . $_SERVER['HTTP_HOST'] . $_SERVER['SCRIPT_NAME'] . '?password_reset';
     $link .= '&user_name=' . urlencode($user_name) . '&verification_code=' . urlencode($user_password_reset_hash);
-    $mail->Body = EMAIL_PASSWORDRESET_CONTENT . ' ' . $link;
+    $mail->Body = $this->config->EMAIL_PASSWORDRESET_CONTENT . ' ' . $link;
     
     if(!$mail->Send()) {
       $this->errors[] = MESSAGE_PASSWORD_RESET_MAIL_FAILED . $mail->ErrorInfo;
@@ -855,16 +854,16 @@ class PHPLogin{
   public function sendVerificationEmail($user_id, $user_email, $user_activation_hash){
     $mail = $this->getPHPMailerObject();
 
-    $mail->From = EMAIL_VERIFICATION_FROM;
-    $mail->FromName = EMAIL_VERIFICATION_FROM_NAME;
+    $mail->From = $this->config->EMAIL_VERIFICATION_FROM;
+    $mail->FromName = $this->config->EMAIL_VERIFICATION_FROM_NAME;
     $mail->AddAddress($user_email);
-    $mail->Subject = EMAIL_VERIFICATION_SUBJECT;
+    $mail->Subject = $this->config->EMAIL_VERIFICATION_SUBJECT;
 
-    $link = 'http://' . $_SERVER['HTTP_HOST'];
+    $link = 'http://' . $this->config->SITE_URL;
     $link .= '?id=' . urlencode($user_id) . '&verification_code=' . urlencode($user_activation_hash);
 
     // the link to your register.php, please set this value in config/email_verification.php
-    $mail->Body = EMAIL_VERIFICATION_CONTENT.' '.$link;
+    $mail->Body = $this->config->EMAIL_VERIFICATION_CONTENT.' '.$link;
 
     if(!$mail->Send()) {
       $this->errors[] = MESSAGE_VERIFICATION_MAIL_NOT_SENT . $mail->ErrorInfo;
@@ -894,7 +893,7 @@ class PHPLogin{
     }
   }
   public function verifyCaptcha(Array $s){
-    $string = 'secret='.RECAPTCHA_SECRETKEY;
+    $string = 'secret='.$this->config->RECAPTCHA_SECRETKEY;
     $i=0;
     foreach ($s as $k => $v){
     	$string .= '&'.$k.'='.$v;
@@ -916,4 +915,11 @@ class PHPLogin{
     $json = json_decode($json);
     return $json->success == true || $json->success == 'true' || $json->success == 1 || $json->success == '1'? true: false;
   }
+}
+
+function dd(){
+  echo '<pre>';
+  foreach(func_get_args() as $args)
+    print_r($args);
+  die('</pre>');
 }
