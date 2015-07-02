@@ -13,7 +13,7 @@
 	<input id="user_password_repeat" type="password" name="user_password_repeat" pattern=".{6,}" required autocomplete="off" />
 
 	<br/>
-	<div class="g-recaptcha" data-sitekey="<?php echo RECAPTCHA_SITEKEY;?>"></div>
+	<div class="g-recaptcha" data-sitekey="<?php echo $login->config->RECAPTCHA_SITEKEY;?>"></div>
 	<input type="submit" name="register" value="<?php echo WORDING_REGISTER; ?>" />
 </form>
 <a href="<?php echo $_SERVER['SCRIPT_NAME']; ?>"><?php echo WORDING_BACK_TO_LOGIN; ?></a>
