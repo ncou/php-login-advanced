@@ -118,5 +118,26 @@ return array(
    * ALLOW_ADMIN_TO_REGISTER_NEW_USER: Administrator (user with an access level of 255) can create new users.
    */
   "ALLOW_USER_REGISTRATION" => true
-  "ALLOW_ADMIN_TO_REGISTER_NEW_USER" => true
+  "ALLOW_ADMIN_TO_REGISTER_NEW_USER" => true,
+    
+  /**
+   * Configuration for: Google's ReCaptcha program
+   * Link: https://www.google.com/recaptcha
+   * This will allow for beter authenciation for registering users.
+   * 
+   * RECAPTCHA_SECRETKEY: On the admin page for your site keys, look for "step 1"
+   *      Step 1: client-side integration 
+   *   In this section you should see two sections of code, the first one is automatically included into 
+   *   this script, the second one should be a bit of HTML. highlight the "data-sitekey" and paste it into
+   *   The REPATCHA_SITEKEY area below where it says "Your site key"
+   * 
+   * RECAPTCHA_SITEKEY:  On the admin page for your site keys, look for "step 2"
+   *      Step 2: Server side integration 
+   *   In this section you should see a table containing 3 rows, look for the (first) row labeled "secret"
+   *   Copy this "secret" code and paste it into "RECAPTCHA_SECRETKEY" where it says "Your secret key"
+   * save the file and this is all set up
+   */
+  'RECAPTCHA_SITEKEY' => 'Your site key'
+  'RECAPTCHA_SECRETKEY' => 'Your secret key'
+);
 );
