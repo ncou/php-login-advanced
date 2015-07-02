@@ -117,7 +117,7 @@ return array(
    * ALLOW_USER_REGISTRATION: If set to false, new users cannot registred and registration link is not displayed.
    * ALLOW_ADMIN_TO_REGISTER_NEW_USER: Administrator (user with an access level of 255) can create new users.
    */
-  "ALLOW_USER_REGISTRATION" => true
+  "ALLOW_USER_REGISTRATION" => true,
   "ALLOW_ADMIN_TO_REGISTER_NEW_USER" => true,
     
   /**
@@ -139,5 +139,4 @@ return array(
    */
   'RECAPTCHA_SITEKEY' => 'Your site key'
   'RECAPTCHA_SECRETKEY' => 'Your secret key'
-);
 );
