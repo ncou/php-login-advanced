@@ -1,7 +1,7 @@
  [![Dependency Status](https://www.versioneye.com/user/projects/553525177f43bc3f44000002/badge.svg?style=flat)](https://packagist.org/packages/austinkregel/php-login-advanced)
  [![Packagist](https://img.shields.io/packagist/dt/austinkregel/php-login-advanced.svg)](https://packagist.org/packages/austinkregel/php-login-advanced)
 ## A Message from Austin (This fork's owner)
-
+ 
 I wanted to note that I am thinking about updating the stylings, I think it looks a little out dated compaired to my other works (I know I didn't style it but I still claim this fork) So I am going to launch several branches listed below.
   
   +  ~~Make a verison for Bootstrap~~ [Bootstrap version](https://github.com/austinkregel/php-login-advanced/tree/bootstrap-master)
@@ -15,7 +15,7 @@ If there is a design style you like that I didn't list above or you can't find a
 
 ## A PHP login script (ADVANCED VERSION)
 
-This script is base on [PHP-Login-Advanced](https://github.com/panique/php-login-advanced) who is not maintained anymore.
+This script is base on [PHP-Login-Advanced](https://github.com/panique/php-login-advanced) which is not maintained anymore.
 
 Please note that this is a [Composer based](https://getcomposer.org) application. Once composer is intalled on your server, run `composer install` in the directory of this app. It will then install the requirements, you can now follow the instructions below.
 
@@ -25,46 +25,46 @@ A live demo can be seen here at [austinkregel.com](http://php-login.austinkregel
 
 If you're going to use this script, I recommend having this in the main page, from whereever you're loading your script. 
 ```php
-<?php
-require 'vendor/autoload.php';
-$login = new Login\PHPLogin();
-function req($s){
-	$dir = 'vendor/austinkregel/php-login-advanced';
+<?php 
+error_reporting(E_ALL); 
+ini_set("display_errors", 1); 
 
-	include( $dir.$s);
-}
-req('/views/_header.php');
+require 'vendor/autoload.php';
+$login = new Login\PHPLogin(dirname(__DIR__).'/master-fork/config.php');
+$dir = 'vendor/austinkregel/php-login-advanced';
+
+include $dir. '/views/_header.php';
 
 // show the registration form
 if (isset($_GET['register']) && ! $login->isRegistrationSuccessful() && 
-   (ALLOW_USER_REGISTRATION || (ALLOW_ADMIN_TO_REGISTER_NEW_USER && $_SESSION['user_access_level'] == 255))) {
-    req('/views/register.php');
+   ($login->config->ALLOW_USER_REGISTRATION || ($login->config->ALLOW_ADMIN_TO_REGISTER_NEW_USER && $_SESSION['user_access_level'] == 255))) {
+    include $dir. ('/views/register.php');
 
 // show the request-a-password-reset or type-your-new-password form
 } else if (isset($_GET['password_reset']) && ! $login->isPasswordResetSuccessful()) {
     if (isset($_REQUEST['user_name']) && isset($_REQUEST['verification_code']) && $login->isPasswordResetLinkValid()) {
         // reset link is correct: ask for the new password
-        req("/views/password_reset.php");
+        include $dir. ("/views/password_reset.php");
     } else {
         // no data from a password-reset-mail has been provided, 
         // we show the request-a-password-reset form
-        req('/views/password_reset_request.php');
+        include $dir. ('/views/password_reset_request.php');
     }
 
 // show the edit form to modify username, email or password
 } else if (isset($_GET['edit']) && $login->isUserLoggedIn()) {
-    req('/views/edit.php');
+    include $dir. ('/views/edit.php');
 
 // the user is logged in, we show informations about the current user
 } else if ($login->isUserLoggedIn()) {
-    req('/views/logged_in.php');
+    include $dir. ('/views/logged_in.php');
 
 // the user is not logged in, we show the login form
 } else {
-    req('/views/not_logged_in.php');
+    include $dir. ('/views/not_logged_in.php');
 }
 
-req('/views/_footer.php');
+include $dir. ('/views/_footer.php');
 ```
 
 A simple, but secure PHP login script with many features includes :
@@ -100,21 +100,35 @@ You can also visit [Professional MVC Version](https://github.com/panique/php-log
 
 ## Installation (quick setup)
 * 1. install [composer](https://getcomposer.org/download/)
-* 2. execute `composer install`
+* 2. execute `composer install` or execute `composer require austinkregel/php-login-advanced`
 * 3. create database *login* and tables *users* and *user_connections* via the SQL statements in the `_installation` folder.
-* 4. in `config/config.php`, change mySQL user and password (*DB_USER* and *DB_PASS*).
-* 5. in `config/config.php`, change *COOKIE_DOMAIN* to your domain name (and don't forget to put the dot in front of the domain!)
-* 6. in `config/config.php`, change *COOKIE_SECRET_KEY* to a random string. this will make your cookies more secure
-* 7. change the URL part of EMAIL_PASSWORDRESET_URL and EMAIL_VERIFICATION_URL in `config/config.php` to your URL! You need to provide the URL of your project here to link to your project from within
-verification/password reset mails.
-* 8. as this version uses email sending, you'll need to a) provide an SMTP account in the config OR b) install a mail server tool on your server.
-Using a real SMTP provider (like [SMTP2GO](http://www.smtp2go.com/?s=devmetal) etc.) is highly recommended. Sending emails manually via mail() is something for hardcore admins.
+* 4. Create a file somewhere for a custom configuration, in the file at least *DB_USER*, *DB_PASS*, *DB_NAME*, *DB_HOST*, *RECAPTCHA_SITEKEY* and *RECAPTCHA_SECRETKEY*. That file MUST return an array so it should look like the file at the end of this list.
+* 5. You need the cookie valid for just a domain (and subdomains) add to the config *COOKIE_DOMAIN*  your domain name (and don't forget to put the dot in front of the domain!)
+* 6. it's recommended that you also add *COOKIE_SECRET_KEY* to the file and make it some random string. This will make your cookies more secure by changing it from the default
+* 7. as this version uses email sending, you'll need to a) provide an SMTP account in the config OR b) install a mail server tool on your server, by default we use the [php mail()](http://php.net/manual/en/function.mail.php) function.
+It's recommeneded you use a real SMTP provider. Sending emails manually via mail() is something for hardcore admins.
 Usually mails sent via mail() will never reach the receiver. Please also don't try weird Gmail setups, this can fail to a lot of reasons.
-Get professional and send mails like mail should be sent. It's extremely cheap and works.
 
-- To enable OpenSSL, do `sudo apt-get install openssl` (and restart the apache via `sudo service apache2 restart`)
-- To enable PHP's GD graphic functions, do `sudo apt-get install php5-gd` (and restart the apache via `sudo service apache2 restart`)
-
+- To enable OpenSSL, follow [this tutorial for Ubuntu / Debian](https://www.digitalocean.com/community/tutorials/how-to-install-linux-apache-mysql-php-lamp-stack-on-ubuntu) and [this tutorial for Fedora / CentOS](https://www.digitalocean.com/community/tutorials/how-to-install-linux-apache-mysql-php-lamp-stack-on-centos-6)
+- Extra packages that are recommended to install
+  - php5-mcrypt
+  - php5-cgi 
+  - php5-curl 
+  - php5-gd 
+  - php5-json 
+```php
+<?php
+return array(
+  'DB_USER' => 'someuser',
+  'DB_PASS' => 'somepass',
+  'DB_NAME' => 'somedbname',
+  'DB_HOST' => 'localhost',
+  'RECAPTCHA_SITEKEY' => 'akey',
+  'RECAPTCHA_SECRETKEY' => 'ShHhhhhh',
+  'SITE_URL' => 'http://example.com',
+  'COOKIE_SECRET_KEY' => 'KL*Jj4owij(*@j32ormskdflavp8)*U(@^gads',
+);
+```
 ## Installation (very detailed setup)
 
 A very detailed guideline on how to install the script
@@ -129,12 +143,13 @@ work for smaller projects, but sometimes gmail.com will not send mails anymore, 
 
 1. "SMTP Connect error": PHPMailer says "smtp login failed", but login is correct: Gmail.com thinks you are a spammer. You'll need to
 "unlock" your application for gmail.com by logging into your gmail account via your browser, go to http://www.google.com/accounts/DisplayUnlockCaptcha
-and then, within the next 10minutes, send an email via your app. Gmail will then white-list your app server.
+and then, within the next 10 minutes, send an email via your app. Gmail will then white-list your app server.
 Have a look here for full explanaition: https://support.google.com/mail/answer/14257?p=client_login&rd=1
 
 2. "SMTP data quota exceeded": gmail blocks you because you have sent more than 500 mails per day (?) or because your users have provided
  too much fake email addresses. The only way to get around this is renting professional SMTP mail sending, prices are okay, 10.000 mails for $5.
 
+3. Please make sure that you have port 25 and / or port 587 open on your server, other wise your mail will never leave your server.
 ## Security notice
 
 This script comes with a handy .htaccess in the views folder that denies direct access to the files within the folder
@@ -143,7 +158,7 @@ This script comes with a handy .htaccess in the views folder that denies direct 
 
 ## How this script works
 
-If you look into the code and at the file/folder-structure everything should be self-explaining.
+If you look into the code and at the file/folder-structure everything should be self-explaining. If it's not please ask a question in the [issues section](https://github.com/austinkregel/php-login-advanced/issues).
 
 ## Useful links
 
@@ -163,7 +178,7 @@ private or commercial projects.
 ## Contribute
 
 If you want to add new features etc, please contribute into the https://github.com/devplanete/php-login-advanced repo.
-Please commit only in *develop* branch. The *master* branch will always contain the stable version.
+Please commit only in *develop* branch. The *master* branch will usually contain the stable version.
 
 ## Support / Donate
 
