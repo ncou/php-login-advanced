@@ -21,7 +21,8 @@ Please note that this is a [Composer based](https://getcomposer.org) application
 
 ## Live-demo
 
-A live demo can be seen here at [austinkregel.com](http://php-login.austinkregel.com/). Please note that the database, truncates (deletes all data) form itself every 2 weeks.
+Users from Japan, India, Brazil, China, and Russia, please accept my appologies as I have blocked all known IP ranges from those countries from accessing my webserver. This is due to recent hack attempts, which include email hijacking.  
+For other countires, A live demo can be seen here at [austinkregel.com](http://php-login.austinkregel.com/). Please note that the database, truncates (deletes all data) form itself every 2 weeks. 
 
 If you're going to use this script, I recommend having this in the main page, from whereever you're loading your script. 
 ```php
