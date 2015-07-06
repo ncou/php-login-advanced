@@ -142,4 +142,3 @@ return array(
   'RECAPTCHA_SITEKEY' => 'Your site key',
   'RECAPTCHA_SECRETKEY' => 'Your secret key'
 );
->>>>>>> bugfixes
