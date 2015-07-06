@@ -74,6 +74,74 @@ return array(
 /**
  * Configuration for: password reset email data
  */
+<<<<<<< HEAD
+define("EMAIL_PASSWORDRESET_FROM", "xxxx@xxxxxx.com");
+define("EMAIL_PASSWORDRESET_FROM_NAME", "PHP-Login From xxxxxxx.com");
+define("EMAIL_PASSWORDRESET_SUBJECT", "Password reset for PROJECT XY");
+define("EMAIL_PASSWORDRESET_CONTENT", "Please click on this link to reset your password:");
+
+/**
+ * Configuration for: verification email data
+ */
+define("EMAIL_VERIFICATION_FROM", "xxxx@xxxxxx.com");
+define("EMAIL_VERIFICATION_FROM_NAME", "PHP-Login From @xxxxxx.com");
+define("EMAIL_VERIFICATION_SUBJECT", "Account activation for PROJECT XY");
+define("EMAIL_VERIFICATION_CONTENT", "Please click on this link to activate your account:");
+
+/**
+ * Configuration for: Hashing strength
+ * This is the place where you define the strength of your password hashing/salting
+ *
+ * To make password encryption very safe and future-proof, the PHP 5.5 hashing/salting functions
+ * come with a clever so called COST FACTOR. This number defines the base-2 logarithm of the rounds of hashing,
+ * something like 2^12 if your cost factor is 12. By the way, 2^12 would be 4096 rounds of hashing, doubling the
+ * round with each increase of the cost factor and therefore doubling the CPU power it needs.
+ * Currently, in 2013, the developers of this functions have chosen a cost factor of 10, which fits most standard
+ * server setups. When time goes by and server power becomes much more powerful, it might be useful to increase
+ * the cost factor, to make the password hashing one step more secure. Have a look here
+ * (@see https://github.com/panique/php-login/wiki/Which-hashing-&-salting-algorithm-should-be-used-%3F)
+ * in the BLOWFISH benchmark table to get an idea how this factor behaves. For most people this is irrelevant,
+ * but after some years this might be very very useful to keep the encryption of your database up to date.
+ *
+ * Remember: Every time a user registers or tries to log in (!) this calculation will be done.
+ * Don't change this if you don't know what you do.
+ *
+ * To get more information about the best cost factor please have a look here
+ * @see http://stackoverflow.com/q/4443476/1114320
+ *
+ * This constant will be used in the login and the registration class.
+ */
+define("HASH_COST_FACTOR", "10");
+
+/**
+ * Configuration for: Registration
+ *
+ * ALLOW_USER_REGISTRATION: If set to false, new users cannot registred and registration link is not displayed.
+ * ALLOW_ADMIN_TO_REGISTER_NEW_USER: Administrator (user with an access level of 255) can create new users.
+ */
+define("ALLOW_USER_REGISTRATION", true);
+define("ALLOW_ADMIN_TO_REGISTER_NEW_USER", true);
+
+/**
+ * Configuration for: Google's ReCaptcha program
+ * Link: https://www.google.com/recaptcha
+ * This will allow for beter authenciation for registering users.
+ * 
+ * RECAPTCHA_SECRETKEY: On the admin page for your site keys, look for "step 1"
+ *      Step 1: client-side integration 
+ *   In this section you should see two sections of code, the first one is automatically included into 
+ *   this script, the second one should be a bit of HTML. highlight the "data-sitekey" and paste it into
+ *   The REPATCHA_SITEKEY area below where it says "Your site key"
+ * 
+ * RECAPTCHA_SITEKEY:  On the admin page for your site keys, look for "step 2"
+ *      Step 2: Server side integration 
+ *   In this section you should see a table containing 3 rows, look for the (first) row labeled "secret"
+ *   Copy this "secret" code and paste it into "RECAPTCHA_SECRETKEY" where it says "Your secret key"
+ * save the file and this is all set up
+ */
+define('RECAPTCHA_SITEKEY', 'Your site key');
+define('RECAPTCHA_SECRETKEY', 'Your secret key');
+=======
   "EMAIL_PASSWORDRESET_FROM" => "xxxx@xxxxxx.com",
   "EMAIL_PASSWORDRESET_FROM_NAME" => "PHP-Login From xxxxxxx.com",
   "EMAIL_PASSWORDRESET_SUBJECT" => "Password reset for PROJECT XY",
@@ -141,3 +209,4 @@ return array(
   'RECAPTCHA_SITEKEY' => 'Your site key',
   'RECAPTCHA_SECRETKEY' => 'Your secret key'
 );
+>>>>>>> bugfixes

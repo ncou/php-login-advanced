@@ -1,5 +1,10 @@
+<<<<<<< HEAD
+[![Dependency Status](https://www.versioneye.com/user/projects/55352a8f7f43bcd88900001a/badge.svg?style=flat)](https://www.versioneye.com/user/projects/55352a8f7f43bcd88900001a)
+
+=======
  [![Dependency Status](https://www.versioneye.com/user/projects/553525177f43bc3f44000002/badge.svg?style=flat)](https://packagist.org/packages/austinkregel/php-login-advanced)
  [![Packagist](https://img.shields.io/packagist/dt/austinkregel/php-login-advanced.svg)](https://packagist.org/packages/austinkregel/php-login-advanced)
+>>>>>>> bugfixes
 ## A Message from Austin (This fork's owner)
  
 I wanted to note that I am thinking about updating the stylings, I think it looks a little out dated compaired to my other works (I know I didn't style it but I still claim this fork) So I am going to launch several branches listed below.
@@ -31,6 +36,20 @@ error_reporting(E_ALL);
 ini_set("display_errors", 1); 
 
 require 'vendor/autoload.php';
+<<<<<<< HEAD
+$login = new Login\PHPLogin();
+function req($s){
+	$dir = 'vendor/austinkregel/php-login-advanced';
+
+	include( $dir.$s);
+}
+req('/views/_header.php');
+
+// show the registration form
+if (isset($_GET['register']) && ! $login->isRegistrationSuccessful() && 
+   (ALLOW_USER_REGISTRATION || (ALLOW_ADMIN_TO_REGISTER_NEW_USER && $_SESSION['user_access_level'] == 255))) {
+    req('/views/register.php');
+=======
 $login = new Login\PHPLogin(dirname(__DIR__).'/master-fork/config.php');
 $dir = 'vendor/austinkregel/php-login-advanced';
 
@@ -40,20 +59,45 @@ include $dir. '/views/_header.php';
 if (isset($_GET['register']) && ! $login->isRegistrationSuccessful() && 
    ($login->config->ALLOW_USER_REGISTRATION || ($login->config->ALLOW_ADMIN_TO_REGISTER_NEW_USER && $_SESSION['user_access_level'] == 255))) {
     include $dir. ('/views/register.php');
+>>>>>>> bugfixes
 
 // show the request-a-password-reset or type-your-new-password form
 } else if (isset($_GET['password_reset']) && ! $login->isPasswordResetSuccessful()) {
     if (isset($_REQUEST['user_name']) && isset($_REQUEST['verification_code']) && $login->isPasswordResetLinkValid()) {
         // reset link is correct: ask for the new password
+<<<<<<< HEAD
+        req("/views/password_reset.php");
+    } else {
+        // no data from a password-reset-mail has been provided, 
+        // we show the request-a-password-reset form
+        req('/views/password_reset_request.php');
+=======
         include $dir. ("/views/password_reset.php");
     } else {
         // no data from a password-reset-mail has been provided, 
         // we show the request-a-password-reset form
         include $dir. ('/views/password_reset_request.php');
+>>>>>>> bugfixes
     }
 
 // show the edit form to modify username, email or password
 } else if (isset($_GET['edit']) && $login->isUserLoggedIn()) {
+<<<<<<< HEAD
+    req('/views/edit.php');
+
+// the user is logged in, we show informations about the current user
+} else if ($login->isUserLoggedIn()) {
+    req('/views/logged_in.php');
+
+// the user is not logged in, we show the login form
+} else {
+    req('/views/not_logged_in.php');
+}
+
+req('/views/_footer.php');
+
+
+=======
     include $dir. ('/views/edit.php');
 
 // the user is logged in, we show informations about the current user
@@ -66,6 +110,7 @@ if (isset($_GET['register']) && ! $login->isRegistrationSuccessful() &&
 }
 
 include $dir. ('/views/_footer.php');
+>>>>>>> bugfixes
 ```
 
 A simple, but secure PHP login script with many features includes :
