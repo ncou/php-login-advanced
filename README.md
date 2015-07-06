@@ -1,7 +1,7 @@
  [![Dependency Status](https://www.versioneye.com/user/projects/553525177f43bc3f44000002/badge.svg?style=flat)](https://packagist.org/packages/austinkregel/php-login-advanced)
  [![Packagist](https://img.shields.io/packagist/dt/austinkregel/php-login-advanced.svg)](https://packagist.org/packages/austinkregel/php-login-advanced)
 ## A Message from Austin (This fork's owner)
- 
+  
 I wanted to note that I am thinking about updating the stylings, I think it looks a little out dated compaired to my other works (I know I didn't style it but I still claim this fork) So I am going to launch several branches listed below.
   
   +  ~~Make a verison for Bootstrap~~ [Bootstrap version](https://github.com/austinkregel/php-login-advanced/tree/bootstrap-master)
@@ -189,3 +189,4 @@ If you think this script is useful and saves you a lot of work, then think about
 ## Stats
 
 [![Bitdeli Badge](https://d2weczhvl823v0.cloudfront.net/austinkregel/php-login-advanced/trend.png)](https://bitdeli.com/free "Bitdeli Badge")
+  
