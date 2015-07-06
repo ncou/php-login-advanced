@@ -1,7 +1,9 @@
 <?php
 namespace Login;
-use \PDO;
-class PHPLogin{
+
+use \PDO as PDO;
+
+class PHPLogin {
  /**
   * handles the user login/logout/session
   * @author devplanete (2013 - 2014)
@@ -763,14 +765,16 @@ class PHPLogin{
    * handles the entire registration process. checks all error possibilities, and creates a new user in the database if
    * everything is fine
    */
-  private function registerNewUser($user_name, $user_email, $user_password, $user_password_repeat, $captcha){
+  public function registerNewUser($user_name, $user_email, $user_password, $user_password_repeat, $captcha) {
     // prevent database flooding
     $user_name = substr(trim($user_name), 0, 64);
     $user_email = substr(trim($user_email), 0, 254);
     
     // check provided data validity
-    if ($this->verifyCaptcha(['response'=>$captcha]) !== true) {
-      ($this->errors[] = MESSAGE_CAPTCHA_WRONG);
+    if ($captcha != false) {
+      if ($this->verifyCaptcha(['response'=>$captcha]) !== true) {
+      	($this->errors[] = MESSAGE_CAPTCHA_WRONG);
+      }
     } elseif (empty($user_name)) {
       ($this->errors[] = MESSAGE_USERNAME_EMPTY);
     } elseif (empty($user_password) || empty($user_password_repeat)) {
