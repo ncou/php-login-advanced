@@ -751,13 +751,13 @@ class PHPLogin {
    * @source http://gravatar.com/site/implement/images/php/
    * @return string
    */
-  public function getGravatarImageUrl($s = 50, $d = 'mm', $r = 'g', $f = 'n', $secure = true) {
+  public function getGravatarImageUrl($s = 50, $d = 'mm', $r = 'g', $secure = true) {
     if ($secure) {
       if ($_SESSION['user_email'] != '' || $_SESSION['user_email'] != null) {
         // the image url (on gravatarr servers), will return in something like
         // http://www.gravatar.com/avatar/205e460b479e2e5b48aec07710c08d50?s=80&d=mm&r=g
         // note: the url does NOT have something like .jpg
-        return 'https://secure.gravatar.com/avatar/' . md5(strtolower(trim($_SESSION['user_email']))) . "?s=$s&d=$d&r=$r&f=$f";
+        return 'https://secure.gravatar.com/avatar/' . md5(strtolower(trim($_SESSION['user_email']))) . "?s=$s&d=$d&r=$r";
       } else {
         return '';
       }
