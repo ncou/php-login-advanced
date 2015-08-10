@@ -255,7 +255,7 @@ class PHPLogin {
    * Logs in via the Cookie
    * @return bool success state of cookie login
    */
-  private function loginWithCookieData() {
+  public function loginWithCookieData() {
     if (isset($_COOKIE['rememberme'])) {
       // extract data from the cookie
       list ($user_id, $token, $hash) = explode(':', $_COOKIE['rememberme']);
@@ -300,7 +300,7 @@ class PHPLogin {
    * @param $user_password
    * @param $user_rememberme
    */
-  private function loginWithPostData($user_name, $user_password, $user_rememberme)
+  public function loginWithPostData($user_name, $user_password, $user_rememberme)
   {
     if (empty($user_name)) {
       $this->errors[] = MESSAGE_USERNAME_EMPTY;
