@@ -3,8 +3,8 @@
 	<fieldset>
 		<legend><?php echo WORDING_FORGOT_MY_PASSWORD; ?></legend>
 		<div class="form-group"> 
-			<input type='hidden' name='user_name' value='<?php echo $_REQUEST['user_name']; ?>' />
-			<input type='hidden' name='verification_code' value='<?php echo $_REQUEST['verification_code']; ?>' />
+			<input type='hidden' name='user_name' value='<?php echo htmlspecialchars($_REQUEST['user_name']); ?>' />
+			<input type='hidden' name='verification_code' value='<?php echo htmlspecialchars($_REQUEST['verification_code']); ?>' />
 		</div>
 		<div class="form-group"> 
 			<label for="user_password_new"><?php echo WORDING_NEW_PASSWORD; ?></label>
