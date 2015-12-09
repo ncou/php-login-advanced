@@ -17,6 +17,7 @@
 		<div class="form-group"> 
 			<input type="submit" name="submit_new_password" class="btn btn-default" value="<?php echo WORDING_SUBMIT_NEW_PASSWORD; ?>" />
 		</div>
+  </fieldset>
   </form>
   <a href="<?php echo $_SERVER['SCRIPT_NAME']; ?>"><?php echo WORDING_BACK_TO_LOGIN; ?></a>
 </div>
