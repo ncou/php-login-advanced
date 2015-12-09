@@ -189,4 +189,3 @@ If you think this script is useful and saves you a lot of work, then think about
 ## Stats
 
 [![Bitdeli Badge](https://d2weczhvl823v0.cloudfront.net/austinkregel/php-login-advanced/trend.png)](https://bitdeli.com/free "Bitdeli Badge")
-  
