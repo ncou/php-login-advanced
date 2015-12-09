@@ -435,15 +435,14 @@ class PHPLogin {
    */
   private function deleteRememberMeCookie() {
     // if database connection opened and remember me cookie exist
-    if ($this->databaseConnection() && isset($_COOKIE['rememberme'])) {
+    if ($this->databaseConnection() && isset($_COOKIE['rememberme']) && isset($_SESSION['user_id'])) {
       // extract data from the cookie
       list ($user_id, $token, $hash) = explode(':', $_COOKIE['rememberme']);
       // check cookie hash validity
       if ($hash == hash('sha256', $user_id . ':' . $token . $this->config->COOKIE_SECRET_KEY) && !empty($token)) {
         // Reset rememberme token of this device
         $sth = $this->db_connection->prepare("DELETE FROM user_connections WHERE user_rememberme_token = :user_rememberme_token AND user_id = :user_id");
-        if(!empty($_SESSION['user_id']))
-          $sth->bindValue(':user_id', $_SESSION['user_id'], PDO::PARAM_INT);
+        $sth->bindValue(':user_id', $_SESSION['user_id'], PDO::PARAM_INT);
         $sth->bindValue(':user_rememberme_token', $token, PDO::PARAM_STR);
         $sth->execute();
       }
