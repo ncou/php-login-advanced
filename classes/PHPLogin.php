@@ -439,7 +439,8 @@ class PHPLogin{
       if ($hash == hash('sha256', $user_id . ':' . $token . $this->config->COOKIE_SECRET_KEY) && !empty($token)) {
         // Reset rememberme token of this device
         $sth = $this->db_connection->prepare("DELETE FROM user_connections WHERE user_rememberme_token = :user_rememberme_token AND user_id = :user_id");
-        $sth->bindValue(':user_id', $_SESSION['user_id'], PDO::PARAM_INT);
+        if(!empty($_SESSION['user_id']))
+          $sth->bindValue(':user_id', $_SESSION['user_id'], PDO::PARAM_INT);
         $sth->bindValue(':user_rememberme_token', $token, PDO::PARAM_STR);
         $sth->execute();
       }
