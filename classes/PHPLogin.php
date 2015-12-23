@@ -36,17 +36,18 @@ class PHPLogin
   /**
    * @var array Collection of error messages
    */
-  public $errors = array();
+  public $errors = [];
   /**
    * @var array Collection of success / neutral messages
    */
-  public $messages = array();
+  public $messages = [];
     /**
      * @var string the url for submitting captcha codes to
      */
     public $captchaUrl = 'https://www.google.com/recaptcha/api/siteverify';
 
     public $config = '';
+
   /**
    * the function "__construct()" automatically starts whenever an object of this class is created,
    * you know, when you do "$login = new PHPLogin();".
@@ -235,7 +236,7 @@ class PHPLogin
     // the PASSWORD_DEFAULT constant is defined by the PHP 5.5, or if you are using PHP 5.3/5.4, by the password hashing
     // compatibility library. the third parameter looks a little bit shitty, but that's how those PHP 5.5 functions
     // want the parameter: as an array with, currently only used with 'cost' => XX.
-    return password_hash($password, PASSWORD_DEFAULT, array('cost' => $hash_cost_factor));
+    return password_hash($password, PASSWORD_DEFAULT, ['cost' => $hash_cost_factor]);
   }
 
   /**
@@ -362,7 +363,7 @@ class PHPLogin
         $sth = $this->db_connection->prepare('UPDATE users '
                 .'SET user_failed_logins = user_failed_logins+1, user_last_failed_login = :user_last_failed_login '
                 .'WHERE user_name = :user_name OR user_email = :user_name');
-          $sth->execute(array(':user_name' => $user_name, ':user_last_failed_login' => time()));
+          $sth->execute([':user_name' => $user_name, ':user_last_failed_login' => time()]);
 
           $this->errors[] = MESSAGE_PASSWORD_WRONG;
       // has the user activated their account with the verification email
@@ -380,7 +381,7 @@ class PHPLogin
         $sth = $this->db_connection->prepare('UPDATE users '
                 .'SET user_failed_logins = 0, user_last_failed_login = NULL '
                 .'WHERE user_id = :user_id AND user_failed_logins != 0');
-          $sth->execute(array(':user_id' => $result_row->user_id));
+          $sth->execute([':user_id' => $result_row->user_id]);
 
         // if user has check the "remember me" checkbox, then generate token and write cookie
         if (isset($user_rememberme)) {
@@ -393,7 +394,7 @@ class PHPLogin
         // check if the have defined a cost factor in config/hashing.php
         if (defined('HASH_COST_FACTOR')) {
             // check if the hash needs to be rehashed
-          if (password_needs_rehash($result_row->user_password_hash, $this->config->PASSWORD_DEFAULT, array('cost' => $this->config->HASH_COST_FACTOR))) {
+          if (password_needs_rehash($result_row->user_password_hash, $this->config->PASSWORD_DEFAULT, ['cost' => $this->config->HASH_COST_FACTOR])) {
 
             // calculate new hash with new cost factor
             $user_password_hash = $this->getPasswordHash($user_password);
@@ -485,7 +486,7 @@ class PHPLogin
   {
       $this->deleteRememberMeCookie();
 
-      $_SESSION = array();
+      $_SESSION = [];
       session_destroy();
 
       $this->messages[] = MESSAGE_LOGGED_OUT;
@@ -812,6 +813,7 @@ class PHPLogin
           return '';
       }
   }
+
   /**
    * handles the entire registration process. checks all error possibilities, and creates a new user in the database if
    * everything is fine.
@@ -905,6 +907,7 @@ class PHPLogin
    * sends an email to the provided email address
    * @return boolean gives back true if mail has been sent, gives back false if no mail could been sent
    */
+
   public function sendVerificationEmail($user_id, $user_email, $user_activation_hash)
   {
       $mail = $this->getPHPMailerObject();
@@ -949,7 +952,8 @@ class PHPLogin
         }
     }
   }
-    public function verifyCaptcha(Array $s)
+
+    public function verifyCaptcha(array $s)
     {
         $string = 'secret='.$this->config->RECAPTCHA_SECRETKEY;
         $i = 0;
@@ -957,14 +961,14 @@ class PHPLogin
             $string .= '&'.$k.'='.$v;
         }
         $ch = curl_init();
-        $options = array(
-      CURLOPT_URL => $this->captchaUrl,
+        $options = [
+      CURLOPT_URL            => $this->captchaUrl,
       CURLOPT_RETURNTRANSFER => true,
-      CURLOPT_POSTFIELDS => ($string),
-      CURLOPT_HEADER => false,
-      CURLOPT_POST => true,
+      CURLOPT_POSTFIELDS     => ($string),
+      CURLOPT_HEADER         => false,
+      CURLOPT_POST           => true,
       //CURLOPT_HTTPHEADER => array('Content-Type:application/json')
-    );
+    ];
         if (count($options > 0)) {
             curl_setopt_array($ch, $options);
         }

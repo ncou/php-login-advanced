@@ -19,7 +19,7 @@ if (!defined('PASSWORD_DEFAULT')) {
      *
      * @return string|false The hashed password, or false on error.
      */
-    function password_hash($password, $algo, array $options = array())
+    function password_hash($password, $algo, array $options = [])
     {
         if (!function_exists('crypt')) {
             trigger_error('Crypt must be loaded for password_hash to function', E_USER_WARNING);
@@ -157,11 +157,11 @@ if (!defined('PASSWORD_DEFAULT')) {
      */
     function password_get_info($hash)
     {
-        $return = array(
-            'algo' => 0,
+        $return = [
+            'algo'     => 0,
             'algoName' => 'unknown',
-            'options' => array(),
-        );
+            'options'  => [],
+        ];
         if (substr($hash, 0, 4) == '$2y$' && strlen($hash) == 60) {
             $return['algo'] = PASSWORD_BCRYPT;
             $return['algoName'] = 'bcrypt';
@@ -183,7 +183,7 @@ if (!defined('PASSWORD_DEFAULT')) {
      *
      * @return bool True if the password needs to be rehashed.
      */
-    function password_needs_rehash($hash, $algo, array $options = array())
+    function password_needs_rehash($hash, $algo, array $options = [])
     {
         $info = password_get_info($hash);
         if ($info['algo'] != $algo) {
