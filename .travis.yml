@@ -9,6 +9,7 @@ php:
 before_script:
   - composer self-update
   - composer install --prefer-source --no-interaction --dev
+  - touch .coverage
 before_script:
   - mysql -e 'CREATE DATABASE IF NOT EXISTS `login`;'
 script: phpunit
