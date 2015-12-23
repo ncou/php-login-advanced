@@ -13,7 +13,7 @@
 
 // check if php gd extension is loaded
 if (!extension_loaded('gd')) {
-    die("It looks like GD is not installed");
+    die('It looks like GD is not installed');
 }
 
 session_start();
@@ -25,7 +25,7 @@ $iCaptchaLength = 4;
 $str_choice = 'ABCDEFGHJKLMNPRTUVWXYZ2346789';
 $str_captcha = '';
 // create target captcha with letters comming from $str_choice
-for ($i=0; $i < $iCaptchaLength; $i++) {
+for ($i = 0; $i < $iCaptchaLength; ++$i) {
     do {
         $ipos = rand(0, strlen($str_choice) - 1);
     // checks that each letter is used only once
@@ -56,7 +56,7 @@ imagefill($im, 0, 0, $bg);
 // create letters. for more info on how this works, please
 // @see php.net/manual/en/function.imagefttext.php
 // TODO: put the font path into the config
-for ($i=0; $i < $iCaptchaLength; $i++) {
+for ($i = 0; $i < $iCaptchaLength; ++$i) {
     $text_color = imagecolorallocate($im, rand(0, 100), rand(10, 100), rand(0, 100));
     // font-path relative to this file
     imagefttext($im, 35, rand(-10, 10), 20 + ($i * 30) + rand(-5, +5), 35 + rand(10, 30), $text_color, 'fonts/times_new_yorker.ttf', $str_captcha[$i]);
@@ -70,5 +70,3 @@ header('Cache-Control: no-store, no-cache, proxy-revalidate');
 // send image to browser and destroy image from php "cache"
 imagepng($im);
 imagedestroy($im);
-
-?>

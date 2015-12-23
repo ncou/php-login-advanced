@@ -9,5 +9,5 @@
 	<input type="submit" name="login" value="<?php echo WORDING_LOGIN; ?>" />
 </form>
 
-<?php echo ($login->config->ALLOW_USER_REGISTRATION ? '<a href="?register">'. WORDING_REGISTER_NEW_ACCOUNT .'</a>&nbsp;&nbsp;|&nbsp;&nbsp;' : ''); ?>
+<?php echo($login->config->ALLOW_USER_REGISTRATION ? '<a href="?register">'.WORDING_REGISTER_NEW_ACCOUNT.'</a>&nbsp;&nbsp;|&nbsp;&nbsp;' : ''); ?>
 <a href="?password_reset"><?php echo WORDING_FORGOT_MY_PASSWORD; ?></a>
