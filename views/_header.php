@@ -11,7 +11,7 @@
 <div class="container">
     <?php
     // show potential errors / feedback (from login object)
-    if (isset( $login )) {
+    if (isset($login)) {
         foreach ($login->errors as $error) {
             echo "<p class='alert alert-danger'>$error</p>\n";
         }
