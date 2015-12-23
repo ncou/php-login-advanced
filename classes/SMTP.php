@@ -116,6 +116,7 @@ class SMTP
      *
      * @link http://en.wikipedia.org/wiki/Variable_envelope_return_path
      * @link http://www.postfix.org/VERP_README.html Info on VERP
+     *
      * @var bool
      */
     public $do_verp = false;
@@ -126,6 +127,7 @@ class SMTP
      * This needs to be quite high to function correctly with hosts using greetdelay as an anti-spam measure.
      *
      * @link http://tools.ietf.org/html/rfc2821#section-4.5.3.2
+     *
      * @var int
      */
     public $Timeout = 300;
@@ -213,14 +215,14 @@ class SMTP
      *
      * @return bool
      */
-    public function connect($host, $port = null, $timeout = 30, $options = array())
+    public function connect($host, $port = null, $timeout = 30, $options = [])
     {
         // Clear errors to avoid confusion
         $this->error = null;
         // Make sure we are __not__ connected
         if ($this->connected()) {
             // Already connected, generate error
-            $this->error = array('error' => 'Already connected to a server');
+            $this->error = ['error' => 'Already connected to a server'];
 
             return false;
         }
@@ -245,11 +247,11 @@ class SMTP
         );
         // Verify we connected properly
         if (empty($this->smtp_conn)) {
-            $this->error = array(
-                'error' => 'Failed to connect to server',
-                'errno' => $errno,
+            $this->error = [
+                'error'  => 'Failed to connect to server',
+                'errno'  => $errno,
                 'errstr' => $errstr,
-            );
+            ];
             if ($this->do_debug >= 1) {
                 $this->edebug(
                     'SMTP ERROR: '.$this->error['error']
@@ -368,7 +370,7 @@ class SMTP
                 $ntlm_client = new ntlm_sasl_client_class();
                 //Check that functions are available
                 if (!$ntlm_client->Initialize($temp)) {
-                    $this->error = array('error' => $temp->error);
+                    $this->error = ['error' => $temp->error];
                     if ($this->do_debug >= 1) {
                         $this->edebug(
                             'You need to enable some modules in your php.ini file: '
@@ -537,7 +539,7 @@ class SMTP
          */
 
         // Normalize line breaks before exploding
-        $lines = explode("\n", str_replace(array("\r\n", "\r"), "\n", $msg_data));
+        $lines = explode("\n", str_replace(["\r\n", "\r"], "\n", $msg_data));
 
         /* To distinguish between a complete RFC822 message and a plain message body, we check if the first field
          * of the first line (':' separated) does not contain a space then it _should_ be a header and we will
@@ -551,7 +553,7 @@ class SMTP
         }
 
         foreach ($lines as $line) {
-            $lines_out = array();
+            $lines_out = [];
             if ($in_headers and $line == '') {
                 $in_headers = false;
             }
@@ -690,7 +692,7 @@ class SMTP
         return $this->sendCommand(
             'RCPT TO',
             'RCPT TO:<'.$toaddr.'>',
-            array(250, 251)
+            [250, 251]
         );
     }
 
@@ -718,9 +720,9 @@ class SMTP
     protected function sendCommand($command, $commandstring, $expect)
     {
         if (!$this->connected()) {
-            $this->error = array(
+            $this->error = [
                 'error' => "Called $command without being connected",
-            );
+            ];
 
             return false;
         }
@@ -735,11 +737,11 @@ class SMTP
 
         if (!in_array($code, (array) $expect)) {
             $this->last_reply = null;
-            $this->error = array(
-                'error' => "$command command failed",
+            $this->error = [
+                'error'     => "$command command failed",
                 'smtp_code' => $code,
-                'detail' => substr($reply, 4),
-            );
+                'detail'    => substr($reply, 4),
+            ];
             if ($this->do_debug >= 1) {
                 $this->edebug(
                     'SMTP ERROR: '.$this->error['error'].': '.$reply
@@ -783,7 +785,7 @@ class SMTP
      */
     public function verify($name)
     {
-        return $this->sendCommand('VRFY', "VRFY $name", array(250, 251));
+        return $this->sendCommand('VRFY', "VRFY $name", [250, 251]);
     }
 
     /**
@@ -808,9 +810,9 @@ class SMTP
      */
     public function turn()
     {
-        $this->error = array(
+        $this->error = [
             'error' => 'The SMTP TURN command is not implemented',
-        );
+        ];
         if ($this->do_debug >= 1) {
             $this->edebug('SMTP NOTICE: '.$this->error['error']);
         }

@@ -18,7 +18,7 @@ define('MESSAGE_EMAIL_EMPTY', 'E-mail не может быть пустым');
 define('MESSAGE_EMAIL_INVALID', 'E-mail адрес не соответствует формату');
 define('MESSAGE_EMAIL_SAME_LIKE_OLD_ONE', 'Новый e-mailадрес не должен совпадать со старым.');
 define('MESSAGE_EMAIL_TOO_LONG', 'E-mail адрес не может быть длиннее 254 символов');
-define('MESSAGE_LINK_PARAMETER_EMPTY', 'Empty link parameter data.');// @todo decide what is it
+define('MESSAGE_LINK_PARAMETER_EMPTY', 'Empty link parameter data.'); // @todo decide what is it
 define('MESSAGE_LOGGED_OUT', 'Вы вышли');
 // The 'login failed'-message is a security improved feedback that doesn't show a potential attacker if the user exists or not
 define('MESSAGE_LOGIN_FAILED', 'Вход не удался');
