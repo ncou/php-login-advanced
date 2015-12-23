@@ -15,6 +15,11 @@ script: phpunit
 env:
   - DB=mysql
 
+before_install:
+  - pip install --user codecov
+after_success:
+  - codecov
+
 matrix:
   allow_failures:
     - php: 5.6

@@ -1,5 +1,5 @@
 <?php
-require dirname( __FILE__ ).'../../classes/PHPLogi.php';
+require dirname( __FILE__ ).'/../../classes/PHPLogin.php';
 use Login\PHPLogin;
 class LibraryTest extends PHPUnit_Framework_TestCase
 {
