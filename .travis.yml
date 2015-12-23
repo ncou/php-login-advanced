@@ -9,11 +9,17 @@ php:
 before_script:
   - composer self-update
   - composer install --prefer-source --no-interaction --dev
+  - touch .coverage
 before_script:
   - mysql -e 'CREATE DATABASE IF NOT EXISTS `login`;'
 script: phpunit
 env:
   - DB=mysql
+
+before_install:
+  - pip install --user codecov
+after_success:
+  - codecov
 
 matrix:
   allow_failures:
@@ -24,3 +30,4 @@ matrix:
 notifications:
     on_success: never
     on_failure: always
+
