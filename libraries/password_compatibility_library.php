@@ -162,9 +162,9 @@ if (!defined('PASSWORD_DEFAULT')) {
     function password_get_info($hash)
     {
         $return = [
-            'algo' => 0,
+            'algo'     => 0,
             'algoName' => 'unknown',
-            'options' => [],
+            'options'  => [],
         ];
         if (substr($hash, 0, 4) == '$2y$' && strlen($hash) == 60) {
             $return['algo'] = PASSWORD_BCRYPT;

@@ -957,6 +957,7 @@ class PHPLogin
      * sends an email to the provided email address
      * @return boolean gives back true if mail has been sent, gives back false if no mail could been sent
      */
+
     public function sendVerificationEmail($user_id, $user_email, $user_activation_hash)
     {
         $mail = $this->getPHPMailerObject();
@@ -1002,7 +1003,7 @@ class PHPLogin
         }
     }
 
-    public function verifyCaptcha(Array $s)
+    public function verifyCaptcha(array $s)
     {
         $string = 'secret='.$this->config->RECAPTCHA_SECRETKEY;
         $i = 0;
@@ -1011,11 +1012,11 @@ class PHPLogin
         }
         $ch = curl_init();
         $options = [
-            CURLOPT_URL => $this->captchaUrl,
+            CURLOPT_URL            => $this->captchaUrl,
             CURLOPT_RETURNTRANSFER => true,
-            CURLOPT_POSTFIELDS => ($string),
-            CURLOPT_HEADER => false,
-            CURLOPT_POST => true,
+            CURLOPT_POSTFIELDS     => ($string),
+            CURLOPT_HEADER         => false,
+            CURLOPT_POST           => true,
             //CURLOPT_HTTPHEADER => array('Content-Type:application/json')
         ];
         if (count($options > 0)) {

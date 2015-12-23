@@ -139,6 +139,7 @@ class PHPMailer
      *
      * @link http://sprain.ch/blog/downloads/php-class-easypeasyics-create-ical-files-with-php/
      * @link http://kigkonsult.se/iCalcreator/
+     *
      * @var string
      */
     public $Ical = '';
@@ -398,6 +399,7 @@ class PHPMailer
      *
      * @link http://en.wikipedia.org/wiki/Variable_envelope_return_path
      * @link http://www.postfix.org/VERP_README.html Postfix VERP info
+     *
      * @var bool
      */
     public $do_verp = false;
@@ -414,6 +416,7 @@ class PHPMailer
      *
      * @note The default remains "\n". We force CRLF where we know
      *        it must be used via self::CRLF.
+     *
      * @var string
      */
     public $LE = "\n";
@@ -445,6 +448,7 @@ class PHPMailer
      * DKIM signing domain name.
      *
      * @example 'example.com'
+     *
      * @var string
      */
     public $DKIM_domain = '';
@@ -991,8 +995,8 @@ class PHPMailer
             case 'noregex':
                 //No PCRE! Do something _very_ approximate!
                 //Check the address is 3 chars or longer and contains an @ that's not the first or last char
-                return (strlen($address) >= 3 and strpos($address, '@') >= 1 and strpos($address,
-                        '@') != strlen($address) - 1);
+                return strlen($address) >= 3 and strpos($address, '@') >= 1 and strpos($address,
+                        '@') != strlen($address) - 1;
             case 'php':
             default:
             return (boolean) filter_var($address, FILTER_VALIDATE_EMAIL);
@@ -1153,9 +1157,9 @@ class PHPMailer
                 if (!@$mail = popen($sendmail, 'w')) {
                     throw new phpmailerException($this->lang('execute').$this->Sendmail, self::STOP_CRITICAL);
                 }
-                fputs($mail, 'To: '.$toAddr."\n");
-                fputs($mail, $header);
-                fputs($mail, $body);
+                fwrite($mail, 'To: '.$toAddr."\n");
+                fwrite($mail, $header);
+                fwrite($mail, $body);
                 $result = pclose($mail);
                 $this->doCallback(($result == 0), [$toAddr], $this->cc, $this->bcc, $this->Subject, $body,
                     $this->From);
@@ -1167,8 +1171,8 @@ class PHPMailer
             if (!@$mail = popen($sendmail, 'w')) {
                 throw new phpmailerException($this->lang('execute').$this->Sendmail, self::STOP_CRITICAL);
             }
-            fputs($mail, $header);
-            fputs($mail, $body);
+            fwrite($mail, $header);
+            fwrite($mail, $body);
             $result = pclose($mail);
             $this->doCallback(($result == 0), $this->to, $this->cc, $this->bcc, $this->Subject, $body, $this->From);
             if ($result != 0) {
@@ -1436,24 +1440,24 @@ class PHPMailer
     {
         // Define full set of translatable strings in English
         $PHPMAILER_LANG = [
-            'authenticate' => 'SMTP Error: Could not authenticate.',
-            'connect_host' => 'SMTP Error: Could not connect to SMTP host.',
-            'data_not_accepted' => 'SMTP Error: data not accepted.',
-            'empty_message' => 'Message body empty',
-            'encoding' => 'Unknown encoding: ',
-            'execute' => 'Could not execute: ',
-            'file_access' => 'Could not access file: ',
-            'file_open' => 'File Error: Could not open file: ',
-            'from_failed' => 'The following From address failed: ',
-            'instantiate' => 'Could not instantiate mail function.',
-            'invalid_address' => 'Invalid address',
+            'authenticate'         => 'SMTP Error: Could not authenticate.',
+            'connect_host'         => 'SMTP Error: Could not connect to SMTP host.',
+            'data_not_accepted'    => 'SMTP Error: data not accepted.',
+            'empty_message'        => 'Message body empty',
+            'encoding'             => 'Unknown encoding: ',
+            'execute'              => 'Could not execute: ',
+            'file_access'          => 'Could not access file: ',
+            'file_open'            => 'File Error: Could not open file: ',
+            'from_failed'          => 'The following From address failed: ',
+            'instantiate'          => 'Could not instantiate mail function.',
+            'invalid_address'      => 'Invalid address',
             'mailer_not_supported' => ' mailer is not supported.',
-            'provide_address' => 'You must provide at least one recipient email address.',
-            'recipients_failed' => 'SMTP Error: The following recipients failed: ',
-            'signing' => 'Signing Error: ',
-            'smtp_connect_failed' => 'SMTP connect() failed.',
-            'smtp_error' => 'SMTP server error: ',
-            'variable_set' => 'Cannot set or reset variable: ',
+            'provide_address'      => 'You must provide at least one recipient email address.',
+            'recipients_failed'    => 'SMTP Error: The following recipients failed: ',
+            'signing'              => 'Signing Error: ',
+            'smtp_connect_failed'  => 'SMTP connect() failed.',
+            'smtp_error'           => 'SMTP server error: ',
+            'variable_set'         => 'Cannot set or reset variable: ',
         ];
         if (empty($lang_path)) {
             // Calculate an absolute path so it can work if CWD is not here
@@ -1473,7 +1477,7 @@ class PHPMailer
         }
         $this->language = $PHPMAILER_LANG;
 
-        return ($foundlang == true); // Returns false if language not found
+        return $foundlang == true; // Returns false if language not found
     }
 
     /**
@@ -2325,9 +2329,9 @@ class PHPMailer
                     // Can't use addslashes as we don't know the value of magic_quotes_sybase
                     $encoded = addcslashes($str, "\0..\37\177\\\"");
                     if (($str == $encoded) && !preg_match('/[^A-Za-z0-9!#$%&\'*+\/=?^_`{|}~ -]/', $str)) {
-                        return ($encoded);
+                        return $encoded;
                     } else {
-                        return ("\"$encoded\"");
+                        return "\"$encoded\"";
                     }
                 }
                 $matchcount = preg_match_all('/[^\040\041\043-\133\135-\176]/', $str, $matches);
@@ -2342,7 +2346,7 @@ class PHPMailer
                 break;
         }
         if ($matchcount == 0) { // There are no chars that need encoding
-            return ($str);
+            return $str;
         }
         $maxlen = 75 - 7 - strlen($this->CharSet);
         // Try to select the encoding which should produce the shortest output
@@ -2380,7 +2384,7 @@ class PHPMailer
     public function hasMultiBytes($str)
     {
         if (function_exists('mb_strlen')) {
-            return (strlen($str) > mb_strlen($str, $this->CharSet));
+            return strlen($str) > mb_strlen($str, $this->CharSet);
         } else { // Assume no multibytes (we can't handle without mbstring functions anyway)
             return false;
         }
@@ -2856,7 +2860,7 @@ class PHPMailer
      */
     public function isError()
     {
-        return ($this->error_count > 0);
+        return $this->error_count > 0;
     }
 
     /**
@@ -2993,97 +2997,97 @@ class PHPMailer
     public static function _mime_types($ext = '')
     {
         $mimes = [
-            'xl' => 'application/excel',
-            'hqx' => 'application/mac-binhex40',
-            'cpt' => 'application/mac-compactpro',
-            'bin' => 'application/macbinary',
-            'doc' => 'application/msword',
-            'word' => 'application/msword',
+            'xl'    => 'application/excel',
+            'hqx'   => 'application/mac-binhex40',
+            'cpt'   => 'application/mac-compactpro',
+            'bin'   => 'application/macbinary',
+            'doc'   => 'application/msword',
+            'word'  => 'application/msword',
             'class' => 'application/octet-stream',
-            'dll' => 'application/octet-stream',
-            'dms' => 'application/octet-stream',
-            'exe' => 'application/octet-stream',
-            'lha' => 'application/octet-stream',
-            'lzh' => 'application/octet-stream',
-            'psd' => 'application/octet-stream',
-            'sea' => 'application/octet-stream',
-            'so' => 'application/octet-stream',
-            'oda' => 'application/oda',
-            'pdf' => 'application/pdf',
-            'ai' => 'application/postscript',
-            'eps' => 'application/postscript',
-            'ps' => 'application/postscript',
-            'smi' => 'application/smil',
-            'smil' => 'application/smil',
-            'mif' => 'application/vnd.mif',
-            'xls' => 'application/vnd.ms-excel',
-            'ppt' => 'application/vnd.ms-powerpoint',
+            'dll'   => 'application/octet-stream',
+            'dms'   => 'application/octet-stream',
+            'exe'   => 'application/octet-stream',
+            'lha'   => 'application/octet-stream',
+            'lzh'   => 'application/octet-stream',
+            'psd'   => 'application/octet-stream',
+            'sea'   => 'application/octet-stream',
+            'so'    => 'application/octet-stream',
+            'oda'   => 'application/oda',
+            'pdf'   => 'application/pdf',
+            'ai'    => 'application/postscript',
+            'eps'   => 'application/postscript',
+            'ps'    => 'application/postscript',
+            'smi'   => 'application/smil',
+            'smil'  => 'application/smil',
+            'mif'   => 'application/vnd.mif',
+            'xls'   => 'application/vnd.ms-excel',
+            'ppt'   => 'application/vnd.ms-powerpoint',
             'wbxml' => 'application/vnd.wap.wbxml',
-            'wmlc' => 'application/vnd.wap.wmlc',
-            'dcr' => 'application/x-director',
-            'dir' => 'application/x-director',
-            'dxr' => 'application/x-director',
-            'dvi' => 'application/x-dvi',
-            'gtar' => 'application/x-gtar',
-            'php3' => 'application/x-httpd-php',
-            'php4' => 'application/x-httpd-php',
-            'php' => 'application/x-httpd-php',
+            'wmlc'  => 'application/vnd.wap.wmlc',
+            'dcr'   => 'application/x-director',
+            'dir'   => 'application/x-director',
+            'dxr'   => 'application/x-director',
+            'dvi'   => 'application/x-dvi',
+            'gtar'  => 'application/x-gtar',
+            'php3'  => 'application/x-httpd-php',
+            'php4'  => 'application/x-httpd-php',
+            'php'   => 'application/x-httpd-php',
             'phtml' => 'application/x-httpd-php',
-            'phps' => 'application/x-httpd-php-source',
-            'js' => 'application/x-javascript',
-            'swf' => 'application/x-shockwave-flash',
-            'sit' => 'application/x-stuffit',
-            'tar' => 'application/x-tar',
-            'tgz' => 'application/x-tar',
-            'xht' => 'application/xhtml+xml',
+            'phps'  => 'application/x-httpd-php-source',
+            'js'    => 'application/x-javascript',
+            'swf'   => 'application/x-shockwave-flash',
+            'sit'   => 'application/x-stuffit',
+            'tar'   => 'application/x-tar',
+            'tgz'   => 'application/x-tar',
+            'xht'   => 'application/xhtml+xml',
             'xhtml' => 'application/xhtml+xml',
-            'zip' => 'application/zip',
-            'mid' => 'audio/midi',
-            'midi' => 'audio/midi',
-            'mp2' => 'audio/mpeg',
-            'mp3' => 'audio/mpeg',
-            'mpga' => 'audio/mpeg',
-            'aif' => 'audio/x-aiff',
-            'aifc' => 'audio/x-aiff',
-            'aiff' => 'audio/x-aiff',
-            'ram' => 'audio/x-pn-realaudio',
-            'rm' => 'audio/x-pn-realaudio',
-            'rpm' => 'audio/x-pn-realaudio-plugin',
-            'ra' => 'audio/x-realaudio',
-            'wav' => 'audio/x-wav',
-            'bmp' => 'image/bmp',
-            'gif' => 'image/gif',
-            'jpeg' => 'image/jpeg',
-            'jpe' => 'image/jpeg',
-            'jpg' => 'image/jpeg',
-            'png' => 'image/png',
-            'tiff' => 'image/tiff',
-            'tif' => 'image/tiff',
-            'eml' => 'message/rfc822',
-            'css' => 'text/css',
-            'html' => 'text/html',
-            'htm' => 'text/html',
+            'zip'   => 'application/zip',
+            'mid'   => 'audio/midi',
+            'midi'  => 'audio/midi',
+            'mp2'   => 'audio/mpeg',
+            'mp3'   => 'audio/mpeg',
+            'mpga'  => 'audio/mpeg',
+            'aif'   => 'audio/x-aiff',
+            'aifc'  => 'audio/x-aiff',
+            'aiff'  => 'audio/x-aiff',
+            'ram'   => 'audio/x-pn-realaudio',
+            'rm'    => 'audio/x-pn-realaudio',
+            'rpm'   => 'audio/x-pn-realaudio-plugin',
+            'ra'    => 'audio/x-realaudio',
+            'wav'   => 'audio/x-wav',
+            'bmp'   => 'image/bmp',
+            'gif'   => 'image/gif',
+            'jpeg'  => 'image/jpeg',
+            'jpe'   => 'image/jpeg',
+            'jpg'   => 'image/jpeg',
+            'png'   => 'image/png',
+            'tiff'  => 'image/tiff',
+            'tif'   => 'image/tiff',
+            'eml'   => 'message/rfc822',
+            'css'   => 'text/css',
+            'html'  => 'text/html',
+            'htm'   => 'text/html',
             'shtml' => 'text/html',
-            'log' => 'text/plain',
-            'text' => 'text/plain',
-            'txt' => 'text/plain',
-            'rtx' => 'text/richtext',
-            'rtf' => 'text/rtf',
-            'vcf' => 'text/vcard',
+            'log'   => 'text/plain',
+            'text'  => 'text/plain',
+            'txt'   => 'text/plain',
+            'rtx'   => 'text/richtext',
+            'rtf'   => 'text/rtf',
+            'vcf'   => 'text/vcard',
             'vcard' => 'text/vcard',
-            'xml' => 'text/xml',
-            'xsl' => 'text/xml',
-            'mpeg' => 'video/mpeg',
-            'mpe' => 'video/mpeg',
-            'mpg' => 'video/mpeg',
-            'mov' => 'video/quicktime',
-            'qt' => 'video/quicktime',
-            'rv' => 'video/vnd.rn-realvideo',
-            'avi' => 'video/x-msvideo',
+            'xml'   => 'text/xml',
+            'xsl'   => 'text/xml',
+            'mpeg'  => 'video/mpeg',
+            'mpe'   => 'video/mpeg',
+            'mpg'   => 'video/mpeg',
+            'mov'   => 'video/quicktime',
+            'qt'    => 'video/quicktime',
+            'rv'    => 'video/vnd.rn-realvideo',
+            'avi'   => 'video/x-msvideo',
             'movie' => 'video/x-sgi-movie',
         ];
 
-        return (array_key_exists(strtolower($ext), $mimes) ? $mimes[strtolower($ext)] : 'application/octet-stream');
+        return array_key_exists(strtolower($ext), $mimes) ? $mimes[strtolower($ext)] : 'application/octet-stream';
     }
 
     /**
