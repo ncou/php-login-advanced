@@ -23,4 +23,3 @@ require $dir.'/config/autoload.php';
 // The Composer auto-loader (official way to load Composer contents) to load external stuff automatically
 // the login object will do all login/logout stuff automatically
 // so this single line handles the entire login process.
-

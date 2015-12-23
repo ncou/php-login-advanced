@@ -14,10 +14,10 @@ return [
    *          by the way, it's bad style to use "root", but for development it will work.
    * DB_PASS: the password of the above user
    */
-    'DB_HOST' => 'localhost',
-    'DB_NAME' => 'database',
-    'DB_USER' => 'user',
-    'DB_PASS' => 'password',
+    'DB_HOST'  => 'localhost',
+    'DB_NAME'  => 'database',
+    'DB_USER'  => 'user',
+    'DB_PASS'  => 'password',
     'SITE_URL' => 'example.com',
   /*
    * Configuration for: Cookies
@@ -35,8 +35,8 @@ return [
    * COOKIE_DOMAIN: The domain where the cookie is valid for, like '.mydomain.com'
    * COOKIE_SECRET_KEY: Put a random value here to make your app more secure. When changed, all cookies are reset.
    */
-    'COOKIE_RUNTIME' => 1209600,
-    'COOKIE_DOMAIN' => false, // to be replaced by '.mydomain.com'
+    'COOKIE_RUNTIME'    => 1209600,
+    'COOKIE_DOMAIN'     => false, // to be replaced by '.mydomain.com'
     'COOKIE_SECRET_KEY' => '1gp@TMPS{+$78sfpMJFe-92s',
   /*
    * Configuration for: Email server credentials
@@ -62,28 +62,28 @@ return [
    * It's really recommended to use SMTP!
    *
    */
-    'EMAIL_USE_SMTP' => false,
-    'EMAIL_SMTP_HOST' => 'https://xxxxxx.com',
-    'EMAIL_SMTP_AUTH' => true,
-    'EMAIL_SMTP_USERNAME' => 'xxxx@xxxxxx.com',
-    'EMAIL_SMTP_PASSWORD' => 'xxxxxx',
-    'EMAIL_SMTP_PORT' => 465,
+    'EMAIL_USE_SMTP'        => false,
+    'EMAIL_SMTP_HOST'       => 'https://xxxxxx.com',
+    'EMAIL_SMTP_AUTH'       => true,
+    'EMAIL_SMTP_USERNAME'   => 'xxxx@xxxxxx.com',
+    'EMAIL_SMTP_PASSWORD'   => 'xxxxxx',
+    'EMAIL_SMTP_PORT'       => 465,
     'EMAIL_SMTP_ENCRYPTION' => 'ssl',
   /*
    * Configuration for: password reset email data
    */
 
-    'EMAIL_PASSWORDRESET_FROM' => 'xxxx@xxxxxx.com',
+    'EMAIL_PASSWORDRESET_FROM'      => 'xxxx@xxxxxx.com',
     'EMAIL_PASSWORDRESET_FROM_NAME' => 'PHP-Login From xxxxxxx.com',
-    'EMAIL_PASSWORDRESET_SUBJECT' => 'Password reset for PROJECT XY',
-    'EMAIL_PASSWORDRESET_CONTENT' => 'Please click on this link to reset your password:',
+    'EMAIL_PASSWORDRESET_SUBJECT'   => 'Password reset for PROJECT XY',
+    'EMAIL_PASSWORDRESET_CONTENT'   => 'Please click on this link to reset your password:',
   /*
    * Configuration for: verification email data
    */
-    'EMAIL_VERIFICATION_FROM' => 'xxxx@xxxxxx.com',
+    'EMAIL_VERIFICATION_FROM'      => 'xxxx@xxxxxx.com',
     'EMAIL_VERIFICATION_FROM_NAME' => 'PHP-Login From @xxxxxx.com',
-    'EMAIL_VERIFICATION_SUBJECT' => 'Account activation for PROJECT XY',
-    'EMAIL_VERIFICATION_CONTENT' => 'Please click on this link to activate your account:',
+    'EMAIL_VERIFICATION_SUBJECT'   => 'Account activation for PROJECT XY',
+    'EMAIL_VERIFICATION_CONTENT'   => 'Please click on this link to activate your account:',
   /*
    * Configuration for: Hashing strength
    * This is the place where you define the strength of your password hashing/salting
@@ -114,7 +114,7 @@ return [
    * ALLOW_USER_REGISTRATION: If set to false, new users cannot registred and registration link is not displayed.
    * ALLOW_ADMIN_TO_REGISTER_NEW_USER: Administrator (user with an access level of 255) can create new users.
    */
-    'ALLOW_USER_REGISTRATION' => true,
+    'ALLOW_USER_REGISTRATION'          => true,
     'ALLOW_ADMIN_TO_REGISTER_NEW_USER' => true,
   /*
    * Configuration for: Google's ReCaptcha program
@@ -133,6 +133,6 @@ return [
    *   Copy this "secret" code and paste it into "RECAPTCHA_SECRETKEY" where it says "Your secret key"
    * save the file and this is all set up
    */
-    'RECAPTCHA_SITEKEY' => 'Your site key',
+    'RECAPTCHA_SITEKEY'   => 'Your site key',
     'RECAPTCHA_SECRETKEY' => 'Your secret key',
 ];

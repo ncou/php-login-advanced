@@ -116,6 +116,7 @@ class SMTP
      *
      * @link http://en.wikipedia.org/wiki/Variable_envelope_return_path
      * @link http://www.postfix.org/VERP_README.html Info on VERP
+     *
      * @var bool
      */
     public $do_verp = false;
@@ -126,6 +127,7 @@ class SMTP
      * This needs to be quite high to function correctly with hosts using greetdelay as an anti-spam measure.
      *
      * @link http://tools.ietf.org/html/rfc2821#section-4.5.3.2
+     *
      * @var int
      */
     public $Timeout = 300;
@@ -235,8 +237,8 @@ class SMTP
         // Verify we connected properly
         if (empty($this->smtp_conn)) {
             $this->error = [
-                'error' => 'Failed to connect to server',
-                'errno' => $errno,
+                'error'  => 'Failed to connect to server',
+                'errno'  => $errno,
                 'errstr' => $errstr,
             ];
             if ($this->do_debug >= 1) {
@@ -688,9 +690,9 @@ class SMTP
         if (!in_array($code, (array) $expect)) {
             $this->last_reply = null;
             $this->error = [
-                'error' => "$command command failed",
+                'error'     => "$command command failed",
                 'smtp_code' => $code,
-                'detail' => substr($reply, 4),
+                'detail'    => substr($reply, 4),
             ];
             if ($this->do_debug >= 1) {
                 $this->edebug('SMTP ERROR: '.$this->error['error'].': '.$reply);
