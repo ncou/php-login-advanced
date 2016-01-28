@@ -1,31 +1,48 @@
  [![Packagist](https://img.shields.io/packagist/dt/austinkregel/php-login-advanced.svg)](https://packagist.org/packages/austinkregel/php-login-advanced)
  [![Style-CI](https://styleci.io/repos/28527820/shield)](https://styleci.io/repos/28527820)
 [![Build Status](https://travis-ci.org/austinkregel/php-login-advanced.svg?branch=bootstrap-master)](https://travis-ci.org/austinkregel/php-login-advanced)
+## Update (01-28-2016)
+I wanted to let everyone know that this package is depreciated in support of the [Laravel framework](https://laravel.com). I will offer security updates, when someone files a pull-request or when someone files an issue to make me aware of the issue.
 
-## A Message from Austin (This fork's owner)
- 
-I wanted to note that I am thinking about updating the stylings, I think it looks a little out dated compaired to my other works (I know I didn't style it but I still claim this fork) So I am going to launch several branches listed below.
-  
-  +  ~~Make a verison for Bootstrap~~ [Bootstrap version](https://github.com/austinkregel/php-login-advanced/tree/bootstrap-master)
-  +  Make a Flat UI version
-  +  Make a Material Design version
-  +  Make a simple, or little css version
+I also want to give anyone who has never used composer a chance to understand the process of setting up this process. 
 
-I plan to make these changes because I have recieved several emails asking for help, and I don't feel right installing this script, I honestly don't so to make myself feel better about it all, I will be making my own changes and then I can claim this as (partially) my own.
-
-If there is a design style you like that I didn't list above or you can't find anywhere else, email me either from [my website](http://austinkregel.com) or from my [github email](http://github.com/austinkregel) located on my github page and link a few images featuring the design so I know how to design it. 
-
-## A PHP login script (ADVANCED VERSION)
-
-This script is base on [PHP-Login-Advanced](https://github.com/panique/php-login-advanced) which is not maintained anymore.
-
-Please note that this is a [Composer based](https://getcomposer.org) application. Once composer is intalled on your server, run `composer install` in the directory of this app. It will then install the requirements, you can now follow the instructions below.
-
-## Live-demo
-
-A live demo can be seen here at [austinkregel.com](http://php-login.austinkregel.com/). Please note that the database, truncates (deletes all data) form itself every 2 weeks.
-
-If you're going to use this script, I recommend having this in the main page, from whereever you're loading your script. 
+1. First and foremost you'll want to [get composer](https://getcomposer.org/doc/00-intro.md)
+2. Once you have composer you'll want to create a `composer.json` file similar to the following in your project directory. ie: if you're creating your website in the directory `/var/www/html/myproject`, than your project root will be that directory. So the file will be located here `/var/www/html/myproject/composer.json`.
+```json
+{
+    "name": "YOURNAME/YOURprojectName",
+    "description": "Please describe your project here..",
+    "authors": [
+        {
+            "name": "Your Name",
+            "email": "youremail@example.com",
+            "homepage":"http://example.com",
+            "role": "Developer"
+        }
+    ],
+    "require": {
+        "php": ">=5.3.7"
+    },
+    "require-dev": {
+        "austinkregel/php-login-advanced": "dev-master"
+    },
+    "minium-stability": "dev"
+}
+```
+3. Once you have the file created, issue the `composer install` command. Which will then install the desired project. Now we can move onto the creation of the `config.php` file. Which will override the default connections to the database as well as the defaults for ReCaptcha. The default config is recommended to look something like this:
+```php
+<?php 
+return array(
+  'DB_HOST' => 'localhost',
+  'DB_NAME' => 'YOUR_DB', 
+  'DB_USER' => 'YOUR_USER',
+  'DB_PASS'=> 'YOUR_PASSWORD',
+  'SITE_URL'=> 'example.com',
+  'RECAPTCHA_SITEKEY' => 'YOUR_SITE_KEY',
+  'RECAPTCHA_SECRETKEY'=>'YOUR_SECRET_KEY',
+);
+```
+4. Now we have the config set up, as well as the default packages.
 ```php
 <?php 
 error_reporting(E_ALL); 
@@ -67,6 +84,34 @@ if (isset($_GET['register']) && ! $login->isRegistrationSuccessful() &&
 
 include $dir. ('/views/_footer.php');
 ```
+
+ 5. Congratulations, we have set everything up that we need. Now you should be able to visit your website and have the option to login. If you have any errors or issues, please file an "Issue" located within the issue tab on the top of this page. Or if you would prefer, grab my email from [my website](https://austinkregel.com)
+ 
+Thank you for using this script!!
+
+## A Message from Austin (This fork's owner)
+ 
+I wanted to note that I am thinking about updating the stylings, I think it looks a little out dated compaired to my other works (I know I didn't style it but I still claim this fork) So I am going to launch several branches listed below.
+  
+  +  ~~Make a verison for Bootstrap~~ [Bootstrap version](https://github.com/austinkregel/php-login-advanced/tree/bootstrap-master)
+  +  Make a Flat UI version
+  +  Make a Material Design version
+  +  Make a simple, or little css version
+
+I plan to make these changes because I have recieved several emails asking for help, and I don't feel right installing this script, I honestly don't so to make myself feel better about it all, I will be making my own changes and then I can claim this as (partially) my own.
+
+If there is a design style you like that I didn't list above or you can't find anywhere else, email me either from [my website](http://austinkregel.com) or from my [github email](http://github.com/austinkregel) located on my github page and link a few images featuring the design so I know how to design it. 
+
+## A PHP login script (ADVANCED VERSION)
+
+This script is base on [PHP-Login-Advanced](https://github.com/panique/php-login-advanced) which is not maintained anymore.
+
+Please note that this is a [Composer based](https://getcomposer.org) application. Once composer is intalled on your server, run `composer install` in the directory of this app. It will then install the requirements, you can now follow the instructions below.
+
+## Live-demo
+
+A live demo can be seen here at [austinkregel.com](http://php-login.austinkregel.com/). Please note that the database, truncates (deletes all data) from itself every 2 weeks.
+
 
 A simple, but secure PHP login script with many features includes :
 - users can register, login, logout (with username or email, password)
@@ -117,24 +162,7 @@ Usually mails sent via mail() will never reach the receiver. Please also don't t
   - php5-curl 
   - php5-gd 
   - php5-json 
-```php
-<?php
-return array(
-  'DB_USER' => 'someuser',
-  'DB_PASS' => 'somepass',
-  'DB_NAME' => 'somedbname',
-  'DB_HOST' => 'localhost',
-  'RECAPTCHA_SITEKEY' => 'akey',
-  'RECAPTCHA_SECRETKEY' => 'ShHhhhhh',
-  'SITE_URL' => 'http://example.com',
-  'COOKIE_SECRET_KEY' => 'KL*Jj4owij(*@j32ormskdflavp8)*U(@^gads',
-);
-```
-## Installation (very detailed setup)
-
-A very detailed guideline on how to install the script
-[here in this blog post](http://www.dev-metal.com/install-php-login-nets-2-advanced-login-script-ubuntu/).
-
+  - 
 ## Troubleshooting & useful stuff
 
 Please use a real SMTP provider for sending mail. Using something like gmail.com or even trying to send mails via
@@ -190,4 +218,3 @@ If you think this script is useful and saves you a lot of work, then think about
 ## Stats
 
 [![Bitdeli Badge](https://d2weczhvl823v0.cloudfront.net/austinkregel/php-login-advanced/trend.png)](https://bitdeli.com/free "Bitdeli Badge")
-
