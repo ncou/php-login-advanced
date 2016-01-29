@@ -277,7 +277,7 @@ class PHPLogin
             // Enable SMTP authentication
             $mail->SMTPAuth = $this->config->EMAIL_SMTP_AUTH;
             // Enable encryption, usually SSL/TLS
-            if ($this->config->EMAIL_SMTP_ENCRYPTION === 'ssl' || $this->config->EMAIL_SMTP_ENCRYPTION === 'tls') {
+            if ($this->config->EMAIL_SMTP_SECURE === true) {
                 $mail->SMTPSecure = $this->config->EMAIL_SMTP_ENCRYPTION;
             }
             // Specify host server
