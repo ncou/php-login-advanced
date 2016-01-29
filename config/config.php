@@ -18,7 +18,6 @@ return [
     'DB_NAME'  => 'database',
     'DB_USER'  => 'user',
     'DB_PASS'  => 'password',
-    'SITE_URL' => 'example.com',
   /*
    * Configuration for: Cookies
    * Please note: The COOKIE_DOMAIN needs the domain where your app is,
@@ -68,7 +67,12 @@ return [
     'EMAIL_SMTP_USERNAME'   => 'xxxx@xxxxxx.com',
     'EMAIL_SMTP_PASSWORD'   => 'xxxxxx',
     'EMAIL_SMTP_PORT'       => 465,
-    'EMAIL_SMTP_ENCRYPTION' => 'ssl',
+    'EMAIL_SMTP_SECURE'     => true,
+    'EMAIL_SMTP_ENCRYPTION' => 'ssl', // or 'tls'
+    
+    //url used in the link for the verification mail (new user).
+    'SITE_URL' => 'example.com',
+    
   /*
    * Configuration for: password reset email data
    */
