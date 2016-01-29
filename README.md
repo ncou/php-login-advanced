@@ -1,7 +1,12 @@
  [![Packagist](https://img.shields.io/packagist/dt/austinkregel/php-login-advanced.svg)](https://packagist.org/packages/austinkregel/php-login-advanced)
  [![Style-CI](https://styleci.io/repos/28527820/shield)](https://styleci.io/repos/28527820)
 [![Build Status](https://travis-ci.org/austinkregel/php-login-advanced.svg?branch=bootstrap-master)](https://travis-ci.org/austinkregel/php-login-advanced)
-## Update (01-28-2016)
+
+## A new fork and a few modifications :
+- removed the dd() function and the error caused when email is already taken.
+- added a parameter to select if the SMTP connection should use SSL.
+
+## Update (01-28-2016) => A Message from Austin (previous fork's owner)
 I wanted to let everyone know that this package is depreciated in support of the [Laravel framework](https://laravel.com). I will offer security updates, when someone files a pull-request or when someone files an issue to make me aware of the issue.
 
 I also want to give anyone who has never used composer a chance to understand the process of setting up this process. 
@@ -89,7 +94,7 @@ include $dir. ('/views/_footer.php');
  
 Thank you for using this script!!
 
-## A Message from Austin (This fork's owner)
+## A Message from Austin (previous fork's owner)
  
 I wanted to note that I am thinking about updating the stylings, I think it looks a little out dated compaired to my other works (I know I didn't style it but I still claim this fork) So I am going to launch several branches listed below.
   
