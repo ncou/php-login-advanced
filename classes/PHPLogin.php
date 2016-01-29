@@ -77,7 +77,6 @@ class PHPLogin
             $config = array_merge($config, $newConf);
         }
         $this->config = (object) $config;
-        //dd($this->config);
         // include the to-be-used language. feel free to translate your project and include something else.
         // detection of the language for the current user/browser
 
@@ -911,7 +910,7 @@ class PHPLogin
 
             // if email already in the database
             if (isset($result_row->user_id)) {
-                $this->dd($this->errors[] = MESSAGE_EMAIL_ALREADY_EXISTS);
+                ($this->errors[] = MESSAGE_EMAIL_ALREADY_EXISTS);
 
                 // Ok user can be create
             } else {
@@ -1028,13 +1027,4 @@ class PHPLogin
 
         return $json->success == true || $json->success == 'true' || $json->success == 1 || $json->success == '1' ? true : false;
     }
-}
-
-function dd()
-{
-    echo '<pre>';
-    foreach (func_get_args() as $args) {
-        print_r($args);
-    }
-    die('</pre>');
 }
